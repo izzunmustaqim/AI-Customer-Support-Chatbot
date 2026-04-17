@@ -1,0 +1,117 @@
+/* =============================================
+   Message Bubble Styles
+   ============================================= */
+
+.messageRow {
+  display: flex;
+  gap: 8px;
+  max-width: 88%;
+  animation: messageIn 0.3s ease forwards;
+}
+
+.userRow {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.assistantRow {
+  align-self: flex-start;
+}
+
+/* --- Avatar --- */
+.avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--color-accent-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* --- Bubble --- */
+.bubble {
+  padding: 10px 14px;
+  border-radius: 16px;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  position: relative;
+}
+
+.userBubble {
+  background: var(--color-accent-primary);
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.assistantBubble {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--color-text-primary);
+  border-bottom-left-radius: 4px;
+  backdrop-filter: blur(8px);
+}
+
+/* --- Content --- */
+.content {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* --- Meta (timestamp + copy) --- */
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 4px;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.bubble:hover .meta {
+  opacity: 1;
+}
+
+.time {
+  font-size: 0.65rem;
+  color: var(--color-text-muted);
+}
+
+.userBubble .time {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* --- Copy Button --- */
+.copyBtn {
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.copyBtn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--color-text-primary);
+}
+
+@keyframes messageIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

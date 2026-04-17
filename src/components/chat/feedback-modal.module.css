@@ -1,0 +1,172 @@
+/* =============================================
+   Feedback Modal Styles
+   ============================================= */
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  animation: fadeIn 0.2s ease forwards;
+}
+
+.modal {
+  width: 90%;
+  max-width: 320px;
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  animation: fadeInUp 0.3s ease forwards;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.modalHeader h4 {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.closeBtn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  color: var(--color-text-muted);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.closeBtn:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text-primary);
+}
+
+/* --- Stars --- */
+.stars {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.star {
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 4px;
+  transition: all var(--transition-fast);
+  border-radius: var(--radius-sm);
+}
+
+.star:hover {
+  transform: scale(1.2);
+}
+
+.starActive {
+  color: var(--color-warning);
+}
+
+/* --- Comment Input --- */
+.commentInput {
+  width: 100%;
+  padding: 10px 12px;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--color-text-primary);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  outline: none;
+  resize: none;
+  margin-bottom: 16px;
+  transition: border-color var(--transition-fast);
+}
+
+.commentInput:focus {
+  border-color: var(--color-accent-primary);
+}
+
+.commentInput::placeholder {
+  color: var(--color-text-muted);
+}
+
+/* --- Submit Button --- */
+.submitBtn {
+  width: 100%;
+  padding: 10px;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: white;
+  background: var(--color-accent-gradient);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  box-shadow: 0 4px 12px var(--color-accent-glow);
+}
+
+.submitBtn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px var(--color-accent-glow);
+}
+
+.submitBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* --- Success State --- */
+.success {
+  text-align: center;
+  padding: 20px 0;
+  animation: fadeInUp 0.3s ease forwards;
+}
+
+.successIcon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.success h4 {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  margin: 0 0 4px;
+  color: var(--color-text-primary);
+}
+
+.success p {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,201 @@
+/* =============================================
+   Dashboard Styles
+   ============================================= */
+
+.dashboard {
+  position: relative;
+  z-index: var(--z-base);
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-lg);
+  min-height: 100vh;
+}
+
+/* --- Header --- */
+.dashboard-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: var(--space-2xl);
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+.dashboard-header h1 {
+  font-size: 2rem;
+  margin-bottom: var(--space-xs);
+}
+
+.dashboard-subtitle {
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+}
+
+/* --- Metrics Grid --- */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+  animation: fadeInUp 0.5s ease 0.1s both;
+}
+
+/* --- Charts Row --- */
+.charts-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+  animation: fadeInUp 0.5s ease 0.2s both;
+}
+
+.chart-card {
+  padding: var(--space-xl);
+}
+
+.chart-card h3 {
+  font-size: 1.1rem;
+  margin-bottom: var(--space-xs);
+}
+
+.chart-subtitle {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-lg);
+}
+
+/* --- Daily Activity Bars --- */
+.daily-bars {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  height: 180px;
+  padding-top: 20px;
+}
+
+.daily-bar-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  height: 100%;
+}
+
+.daily-bar-wrapper {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.daily-bar {
+  width: 100%;
+  max-width: 40px;
+  min-height: 4px;
+  background: var(--color-accent-gradient);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  transition: height var(--transition-slow);
+  box-shadow: 0 0 12px var(--color-accent-glow);
+}
+
+.daily-label {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.daily-count {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+/* --- Empty State --- */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2xl);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.empty-state span {
+  font-size: 2rem;
+  margin-bottom: var(--space-sm);
+}
+
+.empty-state p {
+  font-size: 0.85rem;
+}
+
+/* --- Table --- */
+.table-card {
+  padding: var(--space-xl);
+  animation: fadeInUp 0.5s ease 0.3s both;
+}
+
+.table-card h3 {
+  font-size: 1.1rem;
+  margin-bottom: var(--space-xs);
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.data-table th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.data-table td {
+  padding: 12px 16px;
+  color: var(--color-text-secondary);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.data-table tr:hover td {
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+}
+
+.email-cell {
+  color: var(--color-text-accent) !important;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .charts-row {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-header h1 {
+    font-size: 1.5rem;
+  }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
