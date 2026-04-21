@@ -5,17 +5,18 @@ export default function Home() {
     <>
       <main className="hero">
         <div className="hero-badge">
-          <span>AI-Powered Customer Engine</span>
+          <span>EECA Compliance Assessment Tool</span>
         </div>
 
         <h1>
-          Intelligent Support,{' '}
-          <span className="gradient-text">Instant Answers</span>
+          EECA Readiness{' '}
+          <span className="gradient-text">Assessment</span>
         </h1>
 
         <p className="hero-description">
-          Our AI assistant understands your questions, provides instant support,
-          and connects you with the right team — all in real-time.
+          Check your facility&apos;s compliance readiness with the Energy Efficiency
+          and Conservation Act (EECA). Our AI-powered tool guides you through
+          a structured assessment and provides a detailed readiness report.
         </p>
 
         <div className="hero-features">
@@ -23,25 +24,25 @@ export default function Home() {
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="20 6 9 17 4 12" />
             </svg>
-            <span>Powered by Groq AI</span>
+            <span>15-Question Assessment</span>
           </div>
           <div className="hero-feature">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="20 6 9 17 4 12" />
             </svg>
-            <span>Real-time Streaming</span>
+            <span>Instant Readiness Score</span>
           </div>
           <div className="hero-feature">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="20 6 9 17 4 12" />
             </svg>
-            <span>Smart Intent Detection</span>
+            <span>Gap Analysis & Action Plan</span>
           </div>
           <div className="hero-feature">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="20 6 9 17 4 12" />
             </svg>
-            <span>Analytics Dashboard</span>
+            <span>Powered by AI</span>
           </div>
         </div>
 
@@ -50,7 +51,7 @@ export default function Home() {
             className="btn btn-primary"
             id="hero-cta-chat"
           >
-            💬 Try the AI Assistant
+            📋 Start EECA Assessment
           </span>
           {/* <a href="/dashboard" className="btn btn-ghost" id="hero-cta-dashboard">
             📊 View Dashboard
