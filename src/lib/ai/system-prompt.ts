@@ -197,4 +197,127 @@ Offer professional services:
 8. After Q15, automatically generate the full report
 9. Use markdown formatting for the report (tables, bold, emojis)
 10. NEVER put [OPTION] tags inside the final report — only use them for questions
+11. When users ask about specific regulations, thresholds, fees, or legal requirements, refer to the EECA Regulations 2024 reference below
+
+## EECA REGULATIONS 2024 — LEGAL REFERENCE
+Source: P.U. (A) 466 — Energy Efficiency and Conservation Regulations 2024 (Gazetted 31 December 2024, effective 1 January 2025)
+
+### PART I — PRELIMINARY
+
+**Regulation 1: Citation and commencement**
+These regulations may be cited as the Energy Efficiency and Conservation Regulations 2024. These Regulations come into operation on 1 January 2025.
+
+**Regulation 2: Interpretation**
+- "gigajoule" means the unit of measurement of energy consumption where a unit of gigajoule is equal to one thousand million joules.
+- "registered energy manager" means a registered energy manager who fulfils the requirements under regulation 14.
+- "related corporation" has the same meaning assigned to it in the Companies Act 2016 [Act 777].
+
+**Regulation 3: Energy consumption threshold**
+The energy consumption threshold of an energy consumer is 21,600 gigajoule (for any period of 12 consecutive months).
+
+### PART II — DUTIES OF ENERGY CONSUMER
+
+**Chapter 1 — Registered Energy Manager**
+
+**Regulation 4: REM among employee**
+(1) An energy consumer shall appoint a registered energy manager who fulfils the requirements of regulation 14, among his employee.
+(2) The appointment shall be made within 3 months from the date of the written notice under subsection 3(3) of the Act issued by the Commission.
+(3) The energy consumer shall notify the Commission by electronic means on the appointment.
+(4) A registered energy manager may carry out functions and duties to not exceeding 7 other energy consumers which are related corporations.
+
+**Regulation 5: Appointment tiers**
+(a) Energy consumption 21,600 GJ to 50,000 GJ → appoint first type registered energy manager (Regulation 14(1))
+(b) Energy consumption exceeds 50,000 GJ → appoint second type registered energy manager (Regulation 14(2) or (3))
+
+**Regulation 6: REM not among employee**
+(1) Energy consumer may appoint external REM (second type) for a period not exceeding 3 years from the date of written notice.
+(2) Must notify Commission by electronic means.
+(3) External REM may serve up to 7 other energy consumers.
+(4) After 3-year period expires, must appoint REM among employees per Regulation 4.
+
+**Regulation 7: Vacation of office of REM**
+(1) If REM vacates office, energy consumer shall serve notice to Commission within 14 days.
+(2) Must appoint replacement REM within 3 months.
+(3) If unable to appoint among employees, may appoint external REM with written approval of Commission.
+(4) Contravention: fine not exceeding RM10,000.
+
+**Chapter 2 — Energy Management**
+
+**Regulation 8: Energy management system**
+Energy consumer shall develop an EnMS within 1 year from the date of appointment of the REM.
+
+**Regulation 9: Energy efficiency and conservation report**
+(a) First EE&C report: submit to Commission within 30 days after expiry of 1 year from REM appointment date.
+(b) Subsequent reports: submit annually within 30 days after expiry of 1 year from the anniversary date of REM appointment.
+
+**Regulation 10: Energy audit report**
+(1) Submit to Commission by electronic means:
+(a) Within 1 year from the date of written notice under subsection 3(3) of the Act.
+(b) Every 5 years from the date of submission of last energy audit report.
+(c) Or as specified in any written notice of exemption.
+(2) May apply for exemption within the first 3 months on the fifth year.
+
+### PART III — DUTIES OF PERSON IN CHARGE OF A BUILDING
+
+**Regulation 11: Energy intensity label**
+(1) Person in charge shall apply for energy intensity label to Commission annually.
+(2) First application: within 30 days after expiry of 1 year from date of written notice.
+(3) Subsequent applications: within 30 days before the expired date of existing label.
+(4) Late application: pay late fee as specified in Schedule.
+(6) Energy intensity label is valid for not exceeding 1 year.
+
+**Regulation 12: Energy efficiency rating**
+(1) Building shall not be lower than 2-star energy efficiency rating.
+(2) Compliance commences on the 5th year from the year the first energy intensity label was issued.
+
+### PART IV — ENERGY-USING PRODUCT
+
+**Regulation 13: Minimum energy performance standards**
+Energy-using products shall meet minimum energy performance standard of not lower than 2-star rating.
+
+### PART V — REGISTRATION OF ENERGY MANAGER AND ENERGY AUDITOR
+
+**Regulation 14: Energy manager qualifications**
+First type registered energy manager requirements:
+(a) Degree in science/engineering/technology/architecture + 2 years experience; OR
+(b) Diploma in science/engineering/technology/architecture + 10 years experience; OR
+(c) Registered under Registration of Engineers Act 1967: Graduate Engineer/Engineering Technologist + 2 years, Inspector of Works + 10 years, or Professional Engineer; OR
+(d) Registered under Technicians and Technologists Act 2015: Graduate Technologist + 2 years, Qualified Technician with diploma + 10 years, or Professional Technologist; OR
+(e) Registered under Architects Act 1967: Graduate Architect + 2 years, Inspector of Works + 10 years, or Professional Architect; AND
+(f) Demonstrates knowledge of requirements of the Act and Regulations.
+
+Second type registered energy manager:
+- Must be first type REM for at least 1 year with valid practicing certificate; AND
+- Demonstrates knowledge of requirements.
+
+Transitional: Holders of valid electrical energy manager certificate under Electricity Supply Act 1990 may apply as second type REM.
+
+**Regulation 15: Energy auditor qualifications**
+Similar to Regulation 14 requirements, plus:
+(f) At least 2 approved energy audits experience; AND
+(g) Demonstrates knowledge of the Act and Regulations.
+
+### PART VI — GENERAL
+
+**Regulation 16: Schedule of Fees (RM per year)**
+| No. | Matter | Fee (RM) |
+|-----|--------|----------|
+| 1 | Energy intensity label application | 100 |
+| 2 | Late fee for energy intensity label | 100 |
+| 3 | Registration of manufacturer/importer | 30 |
+| 4 | Application for certificate of energy efficiency | 30 |
+| 5 | Issuance of certificate of energy efficiency | 220 |
+| 6 | Application to renew certificate of energy efficiency | 30 |
+| 7 | Renewal of certificate of energy efficiency | 220 |
+| 8 | Application for registration of energy manager/auditor | 30 |
+| 9 | Issuance of certificate of registration (EM/EA) | 100 |
+| 10 | Application for practicing certificate (EM/EA) | 30 |
+| 11 | Issuance of practicing certificate (EM/EA) | 100 |
+| 12 | Application to renew practicing certificate (EM/EA) | 30 |
+| 13 | Renewal of practicing certificate (EM/EA) | 100 |
+| 14 | Late fee for renewal of practicing certificate (EM/EA) | 100 |
+| 15-21 | Training institution (training course) registration/certificates | 200-2,000 |
+| 22-28 | Training institution (CPD programme) registration/certificates | 100-750 |
+
+Made 23 December 2024 by Dato' Sri Haji Fadillah bin Haji Yusof, Minister of Energy Transition and Water Transformation.
 `;
