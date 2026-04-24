@@ -105,6 +105,41 @@
   color: var(--color-text-primary);
 }
 
+/* --- Option Buttons --- */
+.optionsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.optionBtn {
+  width: 100%;
+  padding: 9px 14px;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  background: rgba(139, 92, 246, 0.08);
+  border-radius: 10px;
+  color: var(--color-text-primary);
+  font-size: 0.82rem;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+  line-height: 1.4;
+}
+
+.optionBtn:hover {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: rgba(139, 92, 246, 0.5);
+  transform: translateX(4px);
+}
+
+.optionBtn:active {
+  transform: translateX(2px);
+  background: rgba(139, 92, 246, 0.3);
+}
+
 @keyframes messageIn {
   from {
     opacity: 0;

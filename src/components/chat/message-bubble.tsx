@@ -6,6 +6,7 @@ import styles from './message-bubble.module.css';
 
 interface MessageBubbleProps {
   message: UIMessage;
+  onOptionClick?: (optionText: string) => void;
 }
 
 // Extract text content from UIMessage parts array
@@ -16,7 +17,26 @@ function getTextContent(message: UIMessage): string {
     .join('');
 }
 
-export function MessageBubble({ message }: MessageBubbleProps) {
+// Parse [OPTION]...[/OPTION] tags from text
+function parseOptions(text: string): { cleanText: string; options: string[] } {
+  const optionRegex = /\[OPTION\](.*?)\[\/OPTION\]/g;
+  const options: string[] = [];
+  let match;
+
+  while ((match = optionRegex.exec(text)) !== null) {
+    options.push(match[1].trim());
+  }
+
+  // Remove option tags from text
+  const cleanText = text
+    .replace(/\[OPTION\].*?\[\/OPTION\]/g, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+
+  return { cleanText, options };
+}
+
+export function MessageBubble({ message, onOptionClick }: MessageBubbleProps) {
   const [copied, setCopied] = useState(false);
   const isUser = message.role === 'user';
   const textContent = getTextContent(message);
@@ -36,6 +56,11 @@ export function MessageBubble({ message }: MessageBubbleProps) {
 
   if (!textContent) return null;
 
+  // Parse options from assistant messages
+  const { cleanText, options } = isUser
+    ? { cleanText: textContent, options: [] }
+    : parseOptions(textContent);
+
   return (
     <div
       className={`${styles.messageRow} ${isUser ? styles.userRow : styles.assistantRow}`}
@@ -49,7 +74,24 @@ export function MessageBubble({ message }: MessageBubbleProps) {
       )}
 
       <div className={`${styles.bubble} ${isUser ? styles.userBubble : styles.assistantBubble}`}>
-        <div className={styles.content}>{textContent}</div>
+        <div className={styles.content}>{cleanText}</div>
+
+        {/* Clickable Option Buttons */}
+        {options.length > 0 && (
+          <div className={styles.optionsContainer}>
+            {options.map((option, index) => (
+              <button
+                key={index}
+                className={styles.optionBtn}
+                onClick={() => onOptionClick?.(option)}
+                aria-label={`Select: ${option}`}
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+        )}
+
         <div className={styles.meta}>
           <span className={styles.time}>{formatTime()}</span>
           {!isUser && (

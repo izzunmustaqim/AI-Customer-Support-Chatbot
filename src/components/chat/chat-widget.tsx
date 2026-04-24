@@ -56,6 +56,14 @@ export function ChatWidget() {
     [sendMessage, isLoading]
   );
 
+  const handleOptionClick = useCallback(
+    async (optionText: string) => {
+      if (isLoading) return;
+      await sendMessage({ text: optionText });
+    },
+    [sendMessage, isLoading]
+  );
+
   return (
     <>
       {/* Floating Action Button */}
@@ -91,7 +99,7 @@ export function ChatWidget() {
                 </svg>
               </div>
               <div>
-                <h3 className={styles.headerTitle}>AI Assistant</h3>
+                <h3 className={styles.headerTitle}>EECA Assessment</h3>
                 <span className={styles.headerStatus}>
                   <span className={styles.statusDot} />
                   {status === 'streaming' ? 'Thinking...' : status === 'submitted' ? 'Connecting...' : 'Online'}
@@ -125,7 +133,7 @@ export function ChatWidget() {
           </div>
 
           {/* Messages */}
-          <MessageList messages={messages} isLoading={isLoading} />
+          <MessageList messages={messages} isLoading={isLoading} onOptionClick={handleOptionClick} />
 
           {/* Error Display */}
           {error && (

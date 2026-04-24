@@ -8,15 +8,22 @@ import styles from './message-list.module.css';
 interface MessageListProps {
   messages: UIMessage[];
   isLoading: boolean;
+  onOptionClick?: (optionText: string) => void;
 }
 
-export function MessageList({ messages, isLoading }: MessageListProps) {
+export function MessageList({ messages, isLoading, onOptionClick }: MessageListProps) {
   const bottomRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to bottom on new messages
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isLoading]);
+
+  // Only show option buttons on the last assistant message
+  const lastAssistantIndex = [...messages].reverse().findIndex((m) => m.role === 'assistant');
+  const lastAssistantId = lastAssistantIndex >= 0
+    ? messages[messages.length - 1 - lastAssistantIndex]?.id
+    : null;
 
   return (
     <div className={styles.messageList} id="chat-message-list">
@@ -30,25 +37,21 @@ export function MessageList({ messages, isLoading }: MessageListProps) {
               <circle cx="14" cy="16" r="1" />
             </svg>
           </div>
-          <h4 className={styles.welcomeTitle}>Hi there! 👋</h4>
+          <h4 className={styles.welcomeTitle}>EECA Readiness Assessment 📋</h4>
           <p className={styles.welcomeText}>
-            I&apos;m your AI assistant. Ask me anything about our products, services,
-            or pricing. I&apos;m here to help!
+            Welcome! I&apos;ll guide you through a compliance readiness assessment
+            for the Energy Efficiency and Conservation Act (EECA) 2024.
           </p>
-          <div className={styles.suggestions}>
-            <span className={styles.suggestionsLabel}>Try asking:</span>
-            <div className={styles.suggestionChips}>
-              <button className={styles.chip}>💰 What are your pricing plans?</button>
-              <button className={styles.chip}>🎯 Can I get a demo?</button>
-              <button className={styles.chip}>🛠️ I need technical support</button>
-            </div>
-          </div>
         </div>
       )}
 
       {/* Messages */}
       {messages.map((message) => (
-        <MessageBubble key={message.id} message={message} />
+        <MessageBubble
+          key={message.id}
+          message={message}
+          onOptionClick={message.id === lastAssistantId ? onOptionClick : undefined}
+        />
       ))}
 
       {/* Typing Indicator */}
