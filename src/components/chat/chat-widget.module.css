@@ -134,12 +134,58 @@
 
 /* --- Error --- */
 .error {
-  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  margin: 8px 12px;
   background: rgba(239, 68, 68, 0.1);
-  border-top: 1px solid rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 10px;
   font-size: 0.8rem;
-  color: var(--color-error);
-  text-align: center;
+  color: #fca5a5;
+}
+
+.errorIcon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+}
+
+.errorContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.errorTitle {
+  font-weight: 600;
+  display: block;
+  color: #fca5a5;
+}
+
+.errorDetail {
+  display: block;
+  margin-top: 2px;
+  opacity: 0.8;
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.retryBtn {
+  padding: 6px 12px;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  color: #fca5a5;
+  cursor: pointer;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.retryBtn:hover {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: rgba(239, 68, 68, 0.5);
 }
 
 /* --- Responsive --- */

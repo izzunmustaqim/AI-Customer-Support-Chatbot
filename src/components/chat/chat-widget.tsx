@@ -138,7 +138,30 @@ export function ChatWidget() {
           {/* Error Display */}
           {error && (
             <div className={styles.error}>
-              <span>⚠️ Connection error. Please try again.</span>
+              <div className={styles.errorIcon}>⚠️</div>
+              <div className={styles.errorContent}>
+                <span className={styles.errorTitle}>
+                  {error.message?.includes('429')
+                    ? 'Too many requests'
+                    : error.message?.includes('401')
+                    ? 'Authentication error'
+                    : 'Connection error'}
+                </span>
+                <span className={styles.errorDetail}>
+                  {error.message?.includes('429')
+                    ? 'Service is busy. Please wait a moment and try again.'
+                    : error.message?.includes('401')
+                    ? 'API key is invalid or expired.'
+                    : 'Something went wrong. Please try again.'}
+                </span>
+              </div>
+              <button
+                className={styles.retryBtn}
+                onClick={() => window.location.reload()}
+                aria-label="Retry"
+              >
+                🔄 Retry
+              </button>
             </div>
           )}
 
