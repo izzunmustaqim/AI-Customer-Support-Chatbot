@@ -1,4 +1,4 @@
-import { groq } from '@ai-sdk/groq';
+import { openai } from '@ai-sdk/openai';
 import { streamText } from 'ai';
 import { SYSTEM_PROMPT } from '@/lib/ai/system-prompt';
 
@@ -60,7 +60,7 @@ export async function POST(req: Request) {
 
   // Stream the AI response
   const result = streamText({
-    model: groq('llama-3.3-70b-versatile'),
+    model: openai('gpt-4o-mini'),
     system: SYSTEM_PROMPT,
     messages: modelMessages,
     onFinish: async ({ text }) => {

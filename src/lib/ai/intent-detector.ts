@@ -1,4 +1,4 @@
-import { groq } from '@ai-sdk/groq';
+import { openai } from '@ai-sdk/openai';
 import { generateObject } from 'ai';
 import { z } from 'zod';
 import { getSupabaseAdmin } from '@/lib/supabase/server';
@@ -23,7 +23,7 @@ export async function detectAndLogIntent(
 ) {
   try {
     const { object } = await generateObject({
-      model: groq('llama-3.3-70b-versatile'),
+      model: openai('gpt-4o-mini'),
       schema: IntentSchema,
       prompt: `Classify the following message into one of these EECA compliance intent categories:
 - eeca_scope: Questions about whether facility falls under EECA

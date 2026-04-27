@@ -14,9 +14,9 @@ export const SYSTEM_PROMPT = `You are an EECA Compliance & Readiness Assessment 
 
 ## Section A — User / Company Information (Not Scored)
 
-**Q1.** Please enter your full name:
+Q1. Please enter your full name:
 
-**Q2.** Your designation / role
+Q2. Your designation / role
 → Single choice:
 - Energy Manager
 - Facility Manager
