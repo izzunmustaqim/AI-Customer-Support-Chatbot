@@ -2,11 +2,17 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
+
+env:
+  NODE_VERSION: "20"
 
 jobs:
+  # ========================================
+  # Job 1: Lint & Type Check
+  # ========================================
   lint:
     name: 🔍 Lint & Type Check
     runs-on: ubuntu-latest
@@ -17,7 +23,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
 
       - name: Install dependencies
@@ -26,6 +32,9 @@ jobs:
       - name: Run TypeScript type check
         run: npx tsc --noEmit
 
+  # ========================================
+  # Job 2: Run Tests
+  # ========================================
   test:
     name: 🧪 Run Tests
     runs-on: ubuntu-latest
@@ -37,7 +46,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
 
       - name: Install dependencies
@@ -49,6 +58,17 @@ jobs:
       - name: Run tests with coverage
         run: npm run test:coverage
 
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 7
+
+  # ========================================
+  # Job 3: Build
+  # ========================================
   build:
     name: 🏗️ Build
     runs-on: ubuntu-latest
@@ -60,7 +80,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: ${{ env.NODE_VERSION }}
           cache: "npm"
 
       - name: Install dependencies
@@ -70,7 +90,12 @@ jobs:
         run: npm run build
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GOOGLE_GENERATIVE_AI_API_KEY: ${{ secrets.GOOGLE_GENERATIVE_AI_API_KEY }}
 
+  # ========================================
+  # Job 4: Deploy (only on main branch push)
+  # ========================================
   deploy:
     name: 🚀 Deploy to Vercel
     runs-on: ubuntu-latest
