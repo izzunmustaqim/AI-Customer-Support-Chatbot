@@ -1,3 +1,4 @@
+// import { groq } from '@ai-sdk/groq';
 import { openai } from '@ai-sdk/openai';
 import { streamText } from 'ai';
 import { SYSTEM_PROMPT } from '@/lib/ai/system-prompt';
@@ -86,7 +87,9 @@ export async function POST(req: Request) {
     // Stream the AI response with retry logic
     const result = await withRetry(() =>
       streamText({
-        model: openai('gpt-4o-mini'),
+        model: openai('gpt-5.4-mini'),
+        // model: openai('gpt-4o-mini'),
+        // model: groq('llama-3.3-70b-versatile'),
         system: SYSTEM_PROMPT,
         messages: modelMessages,
         onFinish: async ({ text }) => {
@@ -117,8 +120,8 @@ export async function POST(req: Request) {
         error: status === 429
           ? 'Service is temporarily busy. Please try again in a moment.'
           : status === 401
-          ? 'API key is invalid or expired.'
-          : 'Something went wrong. Please try again.',
+            ? 'API key is invalid or expired.'
+            : 'Something went wrong. Please try again.',
         code: status,
       }),
       {
