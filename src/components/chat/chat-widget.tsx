@@ -37,6 +37,13 @@ export function ChatWidget() {
     }
   }, [messageCount, showFeedback]);
 
+  // Listen for 'open-chatbot' event from landing page CTA button
+  useEffect(() => {
+    const handleOpen = () => setIsOpen(true);
+    window.addEventListener('open-chatbot', handleOpen);
+    return () => window.removeEventListener('open-chatbot', handleOpen);
+  }, []);
+
   const toggleChat = useCallback(() => {
     setIsOpen((prev) => !prev);
   }, []);
