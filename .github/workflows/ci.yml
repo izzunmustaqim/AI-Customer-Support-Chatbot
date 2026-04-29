@@ -94,13 +94,13 @@ jobs:
           GOOGLE_GENERATIVE_AI_API_KEY: ${{ secrets.GOOGLE_GENERATIVE_AI_API_KEY }}
 
   # ========================================
-  # Job 4: Deploy (only on main branch push)
+  # Job 4: Deploy (only on main branch push + secrets configured)
   # ========================================
   deploy:
     name: 🚀 Deploy to Vercel
     runs-on: ubuntu-latest
     needs: build
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push' && secrets.VERCEL_TOKEN != ''
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
