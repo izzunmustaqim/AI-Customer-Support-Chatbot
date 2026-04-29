@@ -26,15 +26,15 @@ Q2. Your designation / role
 - Business Owner / Director
 - Other
 
-**Q3.** Please enter the name of your company
+Q3. Please enter the name of your company
 
-**Q4.** Please enter the name of the facility, plant, or building that you are responsible for
+Q4. Please enter the name of the facility, plant, or building that you are responsible for
 
-**Q5.** Please provide your contact number and email address
+Q5. Please provide your contact number and email address
 
 ## Section B — EECA Readiness Assessment (Scored: Q6–Q15)
 
-**Q6.** Which best describes your facility?
+Q6. Which best describes your facility?
 → Single choice:
 - Industrial plant / factory
 - Commercial office building
@@ -45,7 +45,7 @@ Q2. Your designation / role
 
 Scoring: Clear answer = 10, Not sure = 0
 
-**Q7.** Based on your last 12 consecutive months of energy use, is your facility likely within EECA scope?
+Q7. Based on your last 12 consecutive months of energy use, is your facility likely within EECA scope?
 → Single choice:
 - Yes — our facility likely exceeds the energy threshold / falls within EECA scope
 - Yes — we have already received a notification or know we are subject to EECA
@@ -56,7 +56,7 @@ Help text: For energy consumers, EECA applies where energy consumption for 12 co
 
 Scoring: Yes and aware = 10, No = 5, Not sure = 0
 
-**Q8.** Do you have at least 12 consecutive months of organized energy consumption data available?
+Q8. Do you have at least 12 consecutive months of organized energy consumption data available?
 → Single choice:
 - Yes — complete and readily available
 - Partly — some data available but incomplete
@@ -67,7 +67,7 @@ Help text: The guidelines expect at least 12 consecutive months of energy data f
 
 Scoring: Yes = 10, Partly = 5, No/Not sure = 0
 
-**Q9.** Has your company formally appointed a Registered Energy Manager (REM), where required?
+Q9. Has your company formally appointed a Registered Energy Manager (REM), where required?
 → Single choice:
 - Yes
 - No
@@ -76,7 +76,7 @@ Scoring: Yes = 10, Partly = 5, No/Not sure = 0
 
 Scoring: Yes = 10, In progress = 5, No/Not sure = 0
 
-**Q10.** Do you have an Energy Management System (EnMS) in place?
+Q10. Do you have an Energy Management System (EnMS) in place?
 → Single choice:
 - Yes — documented and being implemented
 - Partly — some elements exist but not complete
@@ -87,7 +87,7 @@ Help text: EnMS readiness should include a documented energy policy, implementat
 
 Scoring: Yes = 10, Partly = 5, No/Not sure = 0
 
-**Q11.** Which of the following EnMS elements are already in place?
+Q11. Which of the following EnMS elements are already in place?
 → Multiple choice (select all that apply):
 1. Energy Management Policy signed by top management
 2. Energy Management Committee established
@@ -99,7 +99,7 @@ Scoring: Yes = 10, Partly = 5, No/Not sure = 0
 
 Scoring: 5+ selected = 10, 3–4 selected = 7, 1–2 selected = 3, None = 0
 
-**Q12.** Do you conduct regular internal review, awareness, training, and measurement/verification of energy performance?
+Q12. Do you conduct regular internal review, awareness, training, and measurement/verification of energy performance?
 → Single choice:
 - Yes — regularly and documented
 - Partly — done informally or irregularly
@@ -108,7 +108,7 @@ Scoring: 5+ selected = 10, 3–4 selected = 7, 1–2 selected = 3, None = 0
 
 Scoring: Yes = 10, Partly = 5, No/Not sure = 0
 
-**Q13.** Has your latest EECA-related report been prepared and submitted, where applicable?
+Q13. Has your latest EECA-related report been prepared and submitted, where applicable?
 → Single choice:
 - Yes — completed and submitted
 - Prepared but not yet submitted
@@ -119,7 +119,7 @@ Help text: For energy consumers, this refers mainly to the Energy Efficiency & C
 
 Scoring: Submitted = 10, Prepared but not submitted = 5, Not prepared/Not sure = 0
 
-**Q14.** Has an energy audit been conducted by a Registered Energy Auditor (REA), where required?
+Q14. Has an energy audit been conducted by a Registered Energy Auditor (REA), where required?
 → Single choice:
 - Yes — completed
 - In progress
@@ -130,7 +130,7 @@ Help text: Energy consumers are required to cause an energy audit to be conducte
 
 Scoring: Yes = 10, In progress = 5, No/Not sure = 0
 
-**Q15.** For buildings only: what is your current building energy performance / label status?
+Q15. For buildings only: what is your current building energy performance / label status?
 → Single choice:
 - Not applicable — this is not an office building
 - Applicable and we have the required data / BEI / label process in place
