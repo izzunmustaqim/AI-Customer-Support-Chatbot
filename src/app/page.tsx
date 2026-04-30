@@ -4,18 +4,18 @@ export default function Home() {
   return (
     <main className="hero">
       <div className="hero-badge">
-        <span>EECA Compliance Assessment Tool</span>
+        <span>Sandhurst Advisory</span>
       </div>
 
       <h1>
-        EECA Readiness{' '}
-        <span className="gradient-text">Assessment</span>
+        EECA Compliance & Readiness{' '}
+        <span className="gradient-text">Checklist</span>
       </h1>
 
       <p className="hero-description">
         Check your facility&apos;s compliance readiness with the Energy Efficiency
-        and Conservation Act (EECA). Our AI-powered tool guides you through
-        a structured assessment and provides a detailed readiness report.
+        and Conservation Act (EECA) 2024. Our AI-powered tool guides you through
+        a structured and fast assessment and provides a detailed readiness scores plus detailed action  report.
       </p>
 
       <div className="hero-features">
@@ -36,12 +36,6 @@ export default function Home() {
             <polyline points="20 6 9 17 4 12" />
           </svg>
           <span>Gap Analysis &amp; Action Plan</span>
-        </div>
-        <div className="hero-feature">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="20 6 9 17 4 12" />
-          </svg>
-          <span>Powered by AI</span>
         </div>
       </div>
 

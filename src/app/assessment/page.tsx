@@ -51,7 +51,7 @@ export default function AssessmentPage() {
             </svg>
           </div>
           <div>
-            <h1 className="assessment-title">EECA Readiness Assessment</h1>
+            <h1 className="assessment-title">EECA Compliance & Readiness Checklist</h1>
             <span className="assessment-status">
               <span className="assessment-status-dot" />
               {status === 'streaming' ? 'Thinking...' : status === 'submitted' ? 'Connecting...' : 'Online'}
@@ -80,8 +80,8 @@ export default function AssessmentPage() {
             {error.message?.includes('429')
               ? 'Service is busy. Please wait a moment and try again.'
               : error.message?.includes('401')
-              ? 'API key is invalid or expired.'
-              : 'Something went wrong. Please try again.'}
+                ? 'API key is invalid or expired.'
+                : 'Something went wrong. Please try again.'}
           </span>
           <button onClick={() => window.location.reload()}>🔄 Retry</button>
         </div>

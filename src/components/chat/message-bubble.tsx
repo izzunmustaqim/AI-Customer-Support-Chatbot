@@ -17,27 +17,39 @@ function getTextContent(message: UIMessage): string {
     .join('');
 }
 
-// Parse [OPTION]...[/OPTION] tags from text
-function parseOptions(text: string): { cleanText: string; options: string[] } {
+// Parse [OPTION]...[/OPTION] and [CHECKBOX]...[/CHECKBOX] tags from text
+function parseTags(text: string): {
+  cleanText: string;
+  options: string[];
+  checkboxes: string[];
+} {
   const optionRegex = /\[OPTION\](.*?)\[\/OPTION\]/g;
+  const checkboxRegex = /\[CHECKBOX\](.*?)\[\/CHECKBOX\]/g;
   const options: string[] = [];
+  const checkboxes: string[] = [];
   let match;
 
   while ((match = optionRegex.exec(text)) !== null) {
     options.push(match[1].trim());
   }
 
-  // Remove option tags from text
+  while ((match = checkboxRegex.exec(text)) !== null) {
+    checkboxes.push(match[1].trim());
+  }
+
+  // Remove both tag types from text
   const cleanText = text
     .replace(/\[OPTION\].*?\[\/OPTION\]/g, '')
+    .replace(/\[CHECKBOX\].*?\[\/CHECKBOX\]/g, '')
     .replace(/\n{3,}/g, '\n\n')
     .trim();
 
-  return { cleanText, options };
+  return { cleanText, options, checkboxes };
 }
 
 export function MessageBubble({ message, onOptionClick }: MessageBubbleProps) {
   const [copied, setCopied] = useState(false);
+  const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set());
   const isUser = message.role === 'user';
   const textContent = getTextContent(message);
 
@@ -54,12 +66,42 @@ export function MessageBubble({ message, onOptionClick }: MessageBubbleProps) {
     });
   };
 
+  const toggleCheckbox = (item: string) => {
+    setCheckedItems((prev) => {
+      const next = new Set(prev);
+      if (item === 'None of the above') {
+        // If "None" is selected, clear everything else
+        if (next.has(item)) {
+          next.delete(item);
+        } else {
+          next.clear();
+          next.add(item);
+        }
+      } else {
+        // Remove "None" if selecting other items
+        next.delete('None of the above');
+        if (next.has(item)) {
+          next.delete(item);
+        } else {
+          next.add(item);
+        }
+      }
+      return next;
+    });
+  };
+
+  const handleSubmitCheckboxes = () => {
+    if (checkedItems.size === 0) return;
+    const selected = Array.from(checkedItems).join(', ');
+    onOptionClick?.(selected);
+  };
+
   if (!textContent) return null;
 
-  // Parse options from assistant messages
-  const { cleanText, options } = isUser
-    ? { cleanText: textContent, options: [] }
-    : parseOptions(textContent);
+  // Parse options and checkboxes from assistant messages
+  const { cleanText, options, checkboxes } = isUser
+    ? { cleanText: textContent, options: [], checkboxes: [] }
+    : parseTags(textContent);
 
   return (
     <div
@@ -76,7 +118,7 @@ export function MessageBubble({ message, onOptionClick }: MessageBubbleProps) {
       <div className={`${styles.bubble} ${isUser ? styles.userBubble : styles.assistantBubble}`}>
         <div className={styles.content}>{cleanText}</div>
 
-        {/* Clickable Option Buttons */}
+        {/* Clickable Option Buttons (single choice) */}
         {options.length > 0 && (
           <div className={styles.optionsContainer}>
             {options.map((option, index) => (
@@ -89,6 +131,37 @@ export function MessageBubble({ message, onOptionClick }: MessageBubbleProps) {
                 {option}
               </button>
             ))}
+          </div>
+        )}
+
+        {/* Checkbox Options (multiple choice) */}
+        {checkboxes.length > 0 && (
+          <div className={styles.checkboxContainer}>
+            {checkboxes.map((item, index) => (
+              <label key={index} className={styles.checkboxLabel}>
+                <input
+                  type="checkbox"
+                  className={styles.checkboxInput}
+                  checked={checkedItems.has(item)}
+                  onChange={() => toggleCheckbox(item)}
+                />
+                <span className={styles.checkboxCustom}>
+                  {checkedItems.has(item) && (
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  )}
+                </span>
+                <span className={styles.checkboxText}>{item}</span>
+              </label>
+            ))}
+            <button
+              className={styles.submitCheckboxBtn}
+              onClick={handleSubmitCheckboxes}
+              disabled={checkedItems.size === 0}
+            >
+              ✅ Submit Selections ({checkedItems.size})
+            </button>
           </div>
         )}
 

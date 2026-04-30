@@ -13,12 +13,12 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: 'EECA Readiness Assessment | Intelligent Chat Support',
+  title: 'EECA Compliance & Readiness Checklist | Intelligent Chat Support',
   description:
     'Experience next-generation customer support powered by AI. Get instant answers, book demos, and connect with our team through our intelligent chat assistant.',
   keywords: ['AI chatbot', 'customer support', 'AI assistant', 'live chat'],
   openGraph: {
-    title: 'EECA Readiness Assessment',
+    title: 'EECA Compliance & Readiness Checklist',
     description: 'Intelligent AI-powered customer support',
     type: 'website',
   },

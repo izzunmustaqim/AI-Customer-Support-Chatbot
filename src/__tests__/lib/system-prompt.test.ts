@@ -63,4 +63,9 @@ describe('System Prompt', () => {
     expect(SYSTEM_PROMPT).toContain('[OPTION]');
     expect(SYSTEM_PROMPT).toContain('[/OPTION]');
   });
+
+  it('should use CHECKBOX tag format for multiple choice', () => {
+    expect(SYSTEM_PROMPT).toContain('[CHECKBOX]');
+    expect(SYSTEM_PROMPT).toContain('[/CHECKBOX]');
+  });
 });

@@ -37,11 +37,19 @@ export function MessageList({ messages, isLoading, onOptionClick }: MessageListP
               <circle cx="14" cy="16" r="1" />
             </svg>
           </div>
-          <h4 className={styles.welcomeTitle}>EECA Readiness Assessment 📋</h4>
+          <h4 className={styles.welcomeTitle}>EECA Compliance & Readiness Checklist 📋</h4>
           <p className={styles.welcomeText}>
             Welcome! I&apos;ll guide you through a compliance readiness assessment
             for the Energy Efficiency and Conservation Act (EECA) 2024.
           </p>
+          <div className={styles.suggestions}>
+            <span className={styles.suggestionsLabel}>Just say Hi</span>
+            {/* <div className={styles.suggestionChips}>
+              <button className={styles.chip}>Hi</button>
+              <button className={styles.chip}>🎯 Can I get a demo?</button>
+              <button className={styles.chip}>🛠️ I need technical support</button>
+            </div> */}
+          </div>
         </div>
       )}
 
