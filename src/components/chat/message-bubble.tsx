@@ -112,27 +112,27 @@ export function MessageBubble({ message, onOptionClick }: MessageBubbleProps) {
     generateReportPDF(textContent);
   };
 
-  const handleSendEmail = async () => {
-    if (!emailInput.trim() || !emailInput.includes('@')) return;
-    setEmailStatus('sending');
-    try {
-      const res = await fetch('/api/send-report', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: emailInput.trim(),
-          reportText: textContent,
-        }),
-      });
-      if (res.ok) {
-        setEmailStatus('sent');
-      } else {
-        setEmailStatus('error');
-      }
-    } catch {
-      setEmailStatus('error');
-    }
-  };
+  // const handleSendEmail = async () => {
+  //   if (!emailInput.trim() || !emailInput.includes('@')) return;
+  //   setEmailStatus('sending');
+  //   try {
+  //     const res = await fetch('/api/send-report', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({
+  //         email: emailInput.trim(),
+  //         reportText: textContent,
+  //       }),
+  //     });
+  //     if (res.ok) {
+  //       setEmailStatus('sent');
+  //     } else {
+  //       setEmailStatus('error');
+  //     }
+  //   } catch {
+  //     setEmailStatus('error');
+  //   }
+  // };
 
   if (!textContent) return null;
 
@@ -226,11 +226,11 @@ export function MessageBubble({ message, onOptionClick }: MessageBubbleProps) {
                   value={emailInput}
                   onChange={(e) => setEmailInput(e.target.value)}
                   className={styles.emailField}
-                  onKeyDown={(e) => e.key === 'Enter' && handleSendEmail()}
+                // onKeyDown={(e) => e.key === 'Enter' && handleSendEmail()}
                 />
                 <button
                   className={styles.emailSendBtn}
-                  onClick={handleSendEmail}
+                  // onClick={handleSendEmail}
                   disabled={emailStatus === 'sending' || emailStatus === 'sent'}
                 >
                   {emailStatus === 'idle' && 'Send'}
