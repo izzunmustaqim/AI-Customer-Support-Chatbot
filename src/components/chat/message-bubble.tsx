@@ -47,9 +47,21 @@ function parseTags(text: string): {
   return { cleanText, options, checkboxes };
 }
 
+// Check if this message is the final report
+function isReportMessage(text: string): boolean {
+  return (
+    text.includes('/ 100') &&
+    (text.includes('Readiness') || text.includes('Score')) &&
+    text.length > 300
+  );
+}
+
 export function MessageBubble({ message, onOptionClick }: MessageBubbleProps) {
   const [copied, setCopied] = useState(false);
   const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set());
+  const [emailInput, setEmailInput] = useState('');
+  const [showEmailInput, setShowEmailInput] = useState(false);
+  const [emailStatus, setEmailStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
   const isUser = message.role === 'user';
   const textContent = getTextContent(message);
 
@@ -70,7 +82,6 @@ export function MessageBubble({ message, onOptionClick }: MessageBubbleProps) {
     setCheckedItems((prev) => {
       const next = new Set(prev);
       if (item === 'None of the above') {
-        // If "None" is selected, clear everything else
         if (next.has(item)) {
           next.delete(item);
         } else {
@@ -78,7 +89,6 @@ export function MessageBubble({ message, onOptionClick }: MessageBubbleProps) {
           next.add(item);
         }
       } else {
-        // Remove "None" if selecting other items
         next.delete('None of the above');
         if (next.has(item)) {
           next.delete(item);
@@ -96,12 +106,42 @@ export function MessageBubble({ message, onOptionClick }: MessageBubbleProps) {
     onOptionClick?.(selected);
   };
 
+  const handleDownloadPDF = async () => {
+    // Dynamic import to keep bundle small
+    const { generateReportPDF } = await import('@/lib/pdf/generate-report');
+    generateReportPDF(textContent);
+  };
+
+  const handleSendEmail = async () => {
+    if (!emailInput.trim() || !emailInput.includes('@')) return;
+    setEmailStatus('sending');
+    try {
+      const res = await fetch('/api/send-report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: emailInput.trim(),
+          reportText: textContent,
+        }),
+      });
+      if (res.ok) {
+        setEmailStatus('sent');
+      } else {
+        setEmailStatus('error');
+      }
+    } catch {
+      setEmailStatus('error');
+    }
+  };
+
   if (!textContent) return null;
 
   // Parse options and checkboxes from assistant messages
   const { cleanText, options, checkboxes } = isUser
     ? { cleanText: textContent, options: [], checkboxes: [] }
     : parseTags(textContent);
+
+  const showReportActions = !isUser && isReportMessage(textContent);
 
   return (
     <div
@@ -162,6 +202,44 @@ export function MessageBubble({ message, onOptionClick }: MessageBubbleProps) {
             >
               ✅ Submit Selections ({checkedItems.size})
             </button>
+          </div>
+        )}
+
+        {/* Report Actions: PDF Download + Email */}
+        {showReportActions && (
+          <div className={styles.reportActions}>
+            <button className={styles.pdfBtn} onClick={handleDownloadPDF}>
+              📄 Download PDF
+            </button>
+            {!showEmailInput ? (
+              <button
+                className={styles.emailBtn}
+                onClick={() => setShowEmailInput(true)}
+              >
+                📧 Email Report
+              </button>
+            ) : (
+              <div className={styles.emailInputGroup}>
+                <input
+                  type="email"
+                  placeholder="Enter email address"
+                  value={emailInput}
+                  onChange={(e) => setEmailInput(e.target.value)}
+                  className={styles.emailField}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSendEmail()}
+                />
+                <button
+                  className={styles.emailSendBtn}
+                  onClick={handleSendEmail}
+                  disabled={emailStatus === 'sending' || emailStatus === 'sent'}
+                >
+                  {emailStatus === 'idle' && 'Send'}
+                  {emailStatus === 'sending' && '⏳'}
+                  {emailStatus === 'sent' && '✅ Sent!'}
+                  {emailStatus === 'error' && '❌ Retry'}
+                </button>
+              </div>
+            )}
           </div>
         )}
 
