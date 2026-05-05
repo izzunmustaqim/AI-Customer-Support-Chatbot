@@ -206,7 +206,7 @@ export function MessageBubble({ message, onOptionClick }: MessageBubbleProps) {
         )}
 
         {/* Report Actions: PDF Download + Email */}
-        {showReportActions && (
+        {/*showReportActions && (
           <div className={styles.reportActions}>
             <button className={styles.pdfBtn} onClick={handleDownloadPDF}>
               📄 Download PDF
@@ -241,7 +241,7 @@ export function MessageBubble({ message, onOptionClick }: MessageBubbleProps) {
               </div>
             )}
           </div>
-        )}
+        )*/}
 
         <div className={styles.meta}>
           <span className={styles.time}>{formatTime()}</span>
