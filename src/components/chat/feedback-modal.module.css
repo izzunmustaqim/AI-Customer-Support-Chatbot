@@ -5,7 +5,7 @@
 .overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 29, 57, 0.3);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -17,11 +17,11 @@
 .modal {
   width: 90%;
   max-width: 320px;
-  background: var(--color-bg-tertiary);
+  background: #ffffff;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: 24px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 20px 40px rgba(0, 29, 57, 0.15);
   animation: fadeInUp 0.3s ease forwards;
 }
 

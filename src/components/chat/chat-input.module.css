@@ -5,7 +5,7 @@
 .inputForm {
   padding: 12px 16px;
   border-top: 1px solid var(--color-border);
-  background: var(--glass-bg-strong);
+  background: #ffffff;
 }
 
 .inputWrapper {

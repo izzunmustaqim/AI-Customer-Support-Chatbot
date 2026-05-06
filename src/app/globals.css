@@ -1,28 +1,28 @@
 /* =============================================
    AI CHATBOT — DESIGN SYSTEM
-   Premium Glassmorphic Dark Theme
+   Sandhurst Advisory Corporate Theme
    ============================================= */
 
 /* --- Google Fonts Import --- */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
 
 /* --- CSS Custom Properties --- */
 :root {
-  /* Color Palette */
-  --color-bg-primary: #0a0e1a;
-  --color-bg-secondary: #111827;
-  --color-bg-tertiary: #1a2236;
-  --color-surface: rgba(255, 255, 255, 0.04);
-  --color-surface-hover: rgba(255, 255, 255, 0.08);
-  --color-border: rgba(255, 255, 255, 0.08);
-  --color-border-light: rgba(255, 255, 255, 0.12);
+  /* Color Palette — Sandhurst Advisory Branding */
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f8f9fa;
+  --color-bg-tertiary: #f0f2f5;
+  --color-surface: rgba(0, 29, 57, 0.03);
+  --color-surface-hover: rgba(0, 29, 57, 0.06);
+  --color-border: rgba(0, 29, 57, 0.1);
+  --color-border-light: rgba(0, 29, 57, 0.15);
 
-  /* Accent Colors */
-  --color-accent-primary: #6366f1;
-  --color-accent-secondary: #8b5cf6;
-  --color-accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a78bfa 100%);
-  --color-accent-glow: rgba(99, 102, 241, 0.3);
-  --color-accent-subtle: rgba(99, 102, 241, 0.1);
+  /* Accent Colors — Navy & Green */
+  --color-accent-primary: #001d39;
+  --color-accent-secondary: #4CAF50;
+  --color-accent-gradient: linear-gradient(135deg, #001d39 0%, #0a3d6b 50%, #4CAF50 100%);
+  --color-accent-glow: rgba(0, 29, 57, 0.15);
+  --color-accent-subtle: rgba(0, 29, 57, 0.06);
 
   /* Success / Warning / Error */
   --color-success: #10b981;
@@ -30,14 +30,14 @@
   --color-error: #ef4444;
 
   /* Text */
-  --color-text-primary: #f1f5f9;
-  --color-text-secondary: #94a3b8;
-  --color-text-muted: #64748b;
-  --color-text-accent: #a5b4fc;
+  --color-text-primary: #1a1a2e;
+  --color-text-secondary: #555555;
+  --color-text-muted: #888888;
+  --color-text-accent: #001d39;
 
   /* Typography */
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-heading: 'Space Grotesk', 'Inter', sans-serif;
+  --font-heading: 'Poppins', 'Inter', sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
   /* Spacing */
@@ -56,11 +56,11 @@
   --radius-xl: 1.5rem;
   --radius-full: 9999px;
 
-  /* Glassmorphism */
-  --glass-bg: rgba(255, 255, 255, 0.05);
-  --glass-bg-strong: rgba(255, 255, 255, 0.08);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  /* Card Styles (replaces glassmorphism) */
+  --glass-bg: rgba(0, 29, 57, 0.02);
+  --glass-bg-strong: rgba(0, 29, 57, 0.04);
+  --glass-border: rgba(0, 29, 57, 0.08);
+  --glass-shadow: 0 4px 24px rgba(0, 29, 57, 0.08);
   --glass-blur: blur(16px);
 
   /* Transitions */
@@ -89,7 +89,7 @@
 }
 
 html {
-  color-scheme: dark;
+  color-scheme: light;
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -104,7 +104,7 @@ body {
   overflow-x: hidden;
 }
 
-/* --- Background Gradient --- */
+/* --- Subtle Background Pattern --- */
 body::before {
   content: '';
   position: fixed;
@@ -113,9 +113,8 @@ body::before {
   width: 100%;
   height: 100%;
   background:
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.15), transparent),
-    radial-gradient(ellipse 60% 40% at 80% 50%, rgba(139, 92, 246, 0.08), transparent),
-    radial-gradient(ellipse 60% 40% at 20% 80%, rgba(99, 102, 241, 0.06), transparent);
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0, 29, 57, 0.04), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 50%, rgba(152, 94, 35, 0.03), transparent);
   pointer-events: none;
   z-index: 0;
 }
@@ -130,12 +129,12 @@ body::before {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(0, 29, 57, 0.15);
   border-radius: var(--radius-full);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(0, 29, 57, 0.25);
 }
 
 /* --- Typography --- */
@@ -292,10 +291,10 @@ a:hover {
 
 @keyframes pulse-glow {
   0%, 100% {
-    box-shadow: 0 0 20px var(--color-accent-glow);
+    box-shadow: 0 0 12px var(--color-accent-glow);
   }
   50% {
-    box-shadow: 0 0 40px var(--color-accent-glow), 0 0 60px rgba(99, 102, 241, 0.15);
+    box-shadow: 0 0 24px var(--color-accent-glow), 0 0 40px rgba(0, 29, 57, 0.08);
   }
 }
 
@@ -337,9 +336,9 @@ a:hover {
   padding: var(--space-xs) var(--space-md);
   font-size: 0.8rem;
   font-weight: 500;
-  color: var(--color-text-accent);
-  background: var(--color-accent-subtle);
-  border: 1px solid rgba(99, 102, 241, 0.2);
+  color: var(--color-accent-secondary);
+  background: rgba(76, 175, 80, 0.08);
+  border: 1px solid rgba(76, 175, 80, 0.2);
   border-radius: var(--radius-full);
   margin-bottom: var(--space-xl);
   animation: fadeInUp 0.6s ease forwards;

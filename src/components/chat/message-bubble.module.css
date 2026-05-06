@@ -48,11 +48,10 @@
 }
 
 .assistantBubble {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
+  background: #f8f9fa;
+  border: 1px solid var(--color-border);
   color: var(--color-text-primary);
   border-bottom-left-radius: 4px;
-  backdrop-filter: blur(8px);
 }
 
 /* --- Content --- */
@@ -90,7 +89,7 @@
   width: 22px;
   height: 22px;
   border: none;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 29, 57, 0.06);
   border-radius: var(--radius-sm);
   color: var(--color-text-muted);
   cursor: pointer;
@@ -101,7 +100,7 @@
 }
 
 .copyBtn:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(0, 29, 57, 0.12);
   color: var(--color-text-primary);
 }
 
@@ -112,14 +111,14 @@
   gap: 6px;
   margin-top: 10px;
   padding-top: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(76, 175, 80, 0.15);
 }
 
 .optionBtn {
   width: 100%;
   padding: 9px 14px;
-  border: 1px solid rgba(139, 92, 246, 0.3);
-  background: rgba(139, 92, 246, 0.08);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  background: rgba(76, 175, 80, 0.05);
   border-radius: 10px;
   color: var(--color-text-primary);
   font-size: 0.82rem;
@@ -130,14 +129,14 @@
 }
 
 .optionBtn:hover {
-  background: rgba(139, 92, 246, 0.2);
-  border-color: rgba(139, 92, 246, 0.5);
+  background: rgba(76, 175, 80, 0.12);
+  border-color: rgba(76, 175, 80, 0.5);
   transform: translateX(4px);
 }
 
 .optionBtn:active {
   transform: translateX(2px);
-  background: rgba(139, 92, 246, 0.3);
+  background: rgba(76, 175, 80, 0.2);
 }
 
 /* --- Checkbox Options (Multiple Choice) --- */
@@ -147,7 +146,7 @@
   gap: 6px;
   margin-top: 10px;
   padding-top: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(0, 29, 57, 0.08);
 }
 
 .checkboxLabel {
@@ -155,8 +154,8 @@
   align-items: center;
   gap: 10px;
   padding: 9px 14px;
-  border: 1px solid rgba(139, 92, 246, 0.2);
-  background: rgba(139, 92, 246, 0.05);
+  border: 1px solid rgba(76, 175, 80, 0.25);
+  background: rgba(76, 175, 80, 0.03);
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -166,8 +165,8 @@
 }
 
 .checkboxLabel:hover {
-  background: rgba(139, 92, 246, 0.12);
-  border-color: rgba(139, 92, 246, 0.4);
+  background: rgba(76, 175, 80, 0.08);
+  border-color: rgba(76, 175, 80, 0.4);
 }
 
 .checkboxInput {
@@ -177,7 +176,7 @@
 .checkboxCustom {
   width: 20px;
   height: 20px;
-  border: 2px solid rgba(139, 92, 246, 0.4);
+  border: 2px solid rgba(76, 175, 80, 0.4);
   border-radius: 5px;
   display: flex;
   align-items: center;
@@ -188,8 +187,8 @@
 }
 
 .checkboxInput:checked + .checkboxCustom {
-  background: rgba(139, 92, 246, 0.6);
-  border-color: rgba(139, 92, 246, 0.8);
+  background: #4CAF50;
+  border-color: #4CAF50;
   color: white;
 }
 
@@ -201,10 +200,10 @@
   width: 100%;
   padding: 10px 14px;
   margin-top: 4px;
-  border: 1px solid rgba(16, 185, 129, 0.4);
-  background: rgba(16, 185, 129, 0.12);
+  border: none;
+  background: #4CAF50;
   border-radius: 10px;
-  color: #6ee7b7;
+  color: #ffffff;
   font-size: 0.82rem;
   font-weight: 600;
   cursor: pointer;
@@ -212,8 +211,7 @@
 }
 
 .submitCheckboxBtn:hover:not(:disabled) {
-  background: rgba(16, 185, 129, 0.25);
-  border-color: rgba(16, 185, 129, 0.6);
+  background: #43A047;
 }
 
 .submitCheckboxBtn:disabled {
@@ -227,7 +225,7 @@
   gap: 8px;
   margin-top: 12px;
   padding-top: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(0, 29, 57, 0.08);
   flex-wrap: wrap;
 }
 
@@ -245,25 +243,25 @@
 }
 
 .pdfBtn {
-  border: 1px solid rgba(59, 130, 246, 0.4);
-  background: rgba(59, 130, 246, 0.1);
-  color: #93c5fd;
+  border: 1px solid rgba(0, 29, 57, 0.25);
+  background: rgba(0, 29, 57, 0.05);
+  color: var(--color-accent-primary);
 }
 
 .pdfBtn:hover {
-  background: rgba(59, 130, 246, 0.25);
-  border-color: rgba(59, 130, 246, 0.6);
+  background: rgba(0, 29, 57, 0.1);
+  border-color: rgba(0, 29, 57, 0.4);
 }
 
 .emailBtn {
-  border: 1px solid rgba(16, 185, 129, 0.4);
-  background: rgba(16, 185, 129, 0.1);
-  color: #6ee7b7;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  background: rgba(76, 175, 80, 0.08);
+  color: #388E3C;
 }
 
 .emailBtn:hover {
-  background: rgba(16, 185, 129, 0.25);
-  border-color: rgba(16, 185, 129, 0.6);
+  background: rgba(76, 175, 80, 0.15);
+  border-color: rgba(76, 175, 80, 0.5);
 }
 
 .emailInputGroup {
@@ -296,10 +294,10 @@
 
 .emailSendBtn {
   padding: 8px 14px;
-  border: 1px solid rgba(16, 185, 129, 0.4);
-  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  background: rgba(76, 175, 80, 0.1);
   border-radius: 8px;
-  color: #6ee7b7;
+  color: #388E3C;
   font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
@@ -308,7 +306,7 @@
 }
 
 .emailSendBtn:hover:not(:disabled) {
-  background: rgba(16, 185, 129, 0.3);
+  background: rgba(76, 175, 80, 0.2);
 }
 
 .emailSendBtn:disabled {
