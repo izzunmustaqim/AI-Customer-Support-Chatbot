@@ -1,7 +1,8 @@
 'use client';
 
 import { useChat } from '@ai-sdk/react';
-import { useState, useCallback, useEffect } from 'react';
+import { DefaultChatTransport } from 'ai';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { MessageList } from './message-list';
 import { ChatInput } from './chat-input';
 import { FeedbackModal } from './feedback-modal';
@@ -18,8 +19,14 @@ export function ChatWidget() {
   const [showFeedback, setShowFeedback] = useState(false);
   const [messageCount, setMessageCount] = useState(0);
 
+  const transport = useMemo(
+    () => new DefaultChatTransport({ body: { sessionId } }),
+    [sessionId]
+  );
+
   const { messages, sendMessage, status, error } = useChat({
     id: 'main-chat',
+    transport,
     onFinish: () => {
       setMessageCount((prev) => prev + 1);
     },

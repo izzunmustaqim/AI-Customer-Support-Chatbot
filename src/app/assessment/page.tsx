@@ -1,14 +1,27 @@
 'use client';
 
 import { useChat } from '@ai-sdk/react';
-import { useState, useCallback } from 'react';
+import { DefaultChatTransport } from 'ai';
+import { useState, useCallback, useMemo } from 'react';
 import { MessageList } from '@/components/chat/message-list';
 import { ChatInput } from '@/components/chat/chat-input';
 import './assessment.css';
 
 export default function AssessmentPage() {
+  const [sessionId] = useState(() =>
+    typeof window !== 'undefined'
+      ? `assessment_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`
+      : 'ssr'
+  );
+
+  const transport = useMemo(
+    () => new DefaultChatTransport({ body: { sessionId } }),
+    [sessionId]
+  );
+
   const { messages, sendMessage, status, error } = useChat({
     id: 'assessment-chat',
+    transport,
     onError: (err) => {
       console.error('Chat error:', err);
     },

@@ -31,6 +31,7 @@ CREATE TABLE public.detected_intents (
     message_id UUID REFERENCES public.messages(id) ON DELETE CASCADE,
     intent TEXT NOT NULL,
     confidence REAL,
+    message_text TEXT,
     detected_at TIMESTAMPTZ DEFAULT now()
 );
 

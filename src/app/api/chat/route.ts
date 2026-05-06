@@ -45,12 +45,44 @@ function tryGetSupabase() {
 
 export async function POST(req: Request) {
   try {
-    const { messages } = await req.json();
+    const { messages, sessionId } = await req.json();
 
     const supabase = tryGetSupabase();
+    let conversationId: string | null = null;
 
     // Optional: Log to database if Supabase is configured
     if (supabase) {
+      // Step 1: Create or retrieve conversation for this session
+      try {
+        if (sessionId) {
+          // Check if conversation already exists for this session
+          const { data: existing } = await supabase
+            .from('conversations')
+            .select('id')
+            .eq('session_id', sessionId)
+            .single();
+
+          if (existing) {
+            conversationId = existing.id;
+          } else {
+            // Create new conversation
+            const { data: newConv } = await supabase
+              .from('conversations')
+              .insert({
+                session_id: sessionId,
+                page_url: '/assessment',
+                status: 'active',
+              })
+              .select('id')
+              .single();
+            conversationId = newConv?.id || null;
+          }
+        }
+      } catch (e) {
+        console.warn('Conversation creation skipped:', e);
+      }
+
+      // Step 2: Save user message with conversation link
       const lastUserMessage = messages
         .filter((m: { role: string }) => m.role === 'user')
         .pop();
@@ -62,10 +94,22 @@ export async function POST(req: Request) {
 
       if (userTextContent) {
         try {
-          await supabase.from('messages').insert({
-            role: 'user',
-            content: userTextContent,
-          });
+          const { data: savedMsg } = await supabase
+            .from('messages')
+            .insert({
+              conversation_id: conversationId,
+              role: 'user',
+              content: userTextContent,
+            })
+            .select('id')
+            .single();
+
+          // Step 3: Detect and log intent (disabled for now — re-enable when needed)
+          // if (conversationId && savedMsg?.id) {
+          //   import('@/lib/ai/intent-detector').then(({ detectAndLogIntent }) => {
+          //     detectAndLogIntent(userTextContent, conversationId!).catch(() => {});
+          //   }).catch(() => {});
+          // }
         } catch (e) {
           console.warn('DB logging skipped:', e);
         }
@@ -96,11 +140,53 @@ export async function POST(req: Request) {
           if (supabase) {
             try {
               await supabase.from('messages').insert({
+                conversation_id: conversationId,
                 role: 'assistant',
                 content: text,
               });
             } catch (e) {
               console.warn('DB logging skipped:', e);
+            }
+
+            // Auto-extract contact info when Section C is completed
+            try {
+              const thankYouPattern = /thank you for the information|we will send|within 2 working days/i;
+              if (thankYouPattern.test(text) && conversationId) {
+                // Get the last user message (contains their contact info)
+                const lastUserMsg = messages
+                  .filter((m: { role: string }) => m.role === 'user')
+                  .pop();
+                const userInfo = lastUserMsg?.parts
+                  ?.filter((p: { type: string }) => p.type === 'text')
+                  .map((p: { text: string }) => p.text)
+                  .join('') || '';
+
+                if (userInfo) {
+                  // Extract fields using patterns
+                  const emailMatch = userInfo.match(/[\w.-]+@[\w.-]+\.\w+/);
+                  const phoneMatch = userInfo.match(/\+?[\d\s-]{8,}/);
+                  const lines = userInfo.split(/[\n,]+/).map((l: string) => l.trim()).filter(Boolean);
+
+                  // First non-email, non-phone line is likely the name
+                  const name = lines.find((l: string) =>
+                    !l.match(/[\w.-]+@[\w.-]+\.\w+/) &&
+                    !l.match(/\+?[\d\s-]{8,}/) &&
+                    !l.toLowerCase().includes('designation') &&
+                    l.length > 1
+                  ) || null;
+
+                  if (emailMatch) {
+                    await supabase.from('contact_submissions').insert({
+                      conversation_id: conversationId,
+                      name: name,
+                      email: emailMatch[0],
+                      phone: phoneMatch ? phoneMatch[0].trim() : null,
+                    });
+                  }
+                }
+              }
+            } catch (e) {
+              console.warn('Contact extraction skipped:', e);
             }
           }
         },
