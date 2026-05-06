@@ -16,15 +16,16 @@ describe('System Prompt', () => {
     expect(SYSTEM_PROMPT).toContain('Energy Efficiency and Conservation');
   });
 
-  it('should include all 15 questions', () => {
-    for (let i = 1; i <= 15; i++) {
+  it('should include all 10 scored questions', () => {
+    for (let i = 1; i <= 10; i++) {
       expect(SYSTEM_PROMPT).toContain(`Q${i}.`);
     }
   });
 
-  it('should define Section A (user info) and Section B (scored)', () => {
-    expect(SYSTEM_PROMPT).toContain('Section A');
+  it('should define section A (awareness), section B (scored), and section C (user info)', () => {
+    expect(SYSTEM_PROMPT).toContain('section A');
     expect(SYSTEM_PROMPT).toContain('Section B');
+    expect(SYSTEM_PROMPT).toContain('Section C');
     expect(SYSTEM_PROMPT).toContain('Not Scored');
     expect(SYSTEM_PROMPT).toContain('Scored');
   });
