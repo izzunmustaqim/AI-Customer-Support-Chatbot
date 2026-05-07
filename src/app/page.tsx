@@ -45,6 +45,11 @@ export default function Home() {
           📋 Start EECA Assessment
         </Link>
       </div>
+
+      <div className="hero-powered-by">
+        <span>Powered by</span>
+        <Image src="/enerlytic-logo.png" alt="Enerlytic Intelligence" width={140} height={35} />
+      </div>
     </main>
   );
 }
