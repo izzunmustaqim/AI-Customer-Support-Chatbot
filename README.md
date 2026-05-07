@@ -11,6 +11,10 @@ Developed by **Sandhurst Advisory** in collaboration with **Enerlytic Intelligen
 ![Tests](https://img.shields.io/badge/Tests-54%20passed-brightgreen)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
+🔗 **Live Demo:** [ai-customer-support-chatbot-dun.vercel.app](https://ai-customer-support-chatbot-dun.vercel.app/)
+
+📂 **Repository:** [github.com/izzunmustaqim/Compliance-Readiness-Assessment-Tool](https://github.com/izzunmustaqim/Compliance-Readiness-Assessment-Tool)
+
 ---
 
 ## ✨ Features

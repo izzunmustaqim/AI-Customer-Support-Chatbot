@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <main className="hero">
       <div className="hero-badge">
-        <Image src="/sandhurst-logo.png" alt="Sandhurst Advisory" width={180} height={45} priority />
+        <Image src="/sandhurst-logo.png" alt="Sandhurst Advisory" width={250} height={63} priority />
       </div>
 
       <h1>
@@ -48,7 +48,7 @@ export default function Home() {
 
       <div className="hero-powered-by">
         <span>Powered by</span>
-        <Image src="/enerlytic-logo.png" alt="Enerlytic Intelligence" width={140} height={35} />
+        <Image src="/enerlytic-logo.png" alt="Enerlytic Intelligence" width={180} height={45} />
       </div>
     </main>
   );
