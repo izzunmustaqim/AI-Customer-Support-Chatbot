@@ -13,8 +13,6 @@ Developed by **Sandhurst Advisory** in collaboration with **Enerlytic Intelligen
 
 🔗 **Live Demo:** [ai-customer-support-chatbot-dun.vercel.app](https://ai-customer-support-chatbot-dun.vercel.app/)
 
-📂 **Repository:** [github.com/izzunmustaqim/Compliance-Readiness-Assessment-Tool](https://github.com/izzunmustaqim/Compliance-Readiness-Assessment-Tool)
-
 ---
 
 ## ✨ Features
