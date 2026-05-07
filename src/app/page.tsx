@@ -1,10 +1,11 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Home() {
   return (
     <main className="hero">
       <div className="hero-badge">
-        <span>Sandhurst Advisory</span>
+        <Image src="/sandhurst-logo.png" alt="Sandhurst Advisory" width={180} height={45} priority />
       </div>
 
       <h1>
