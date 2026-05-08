@@ -1,4 +1,15 @@
+# =============================================
+# EECA Chatbot — Docker Compose (VPS Production)
+# =============================================
+# Usage:
+#   1. Copy .env.local to the VPS
+#   2. Run: docker compose up -d --build
+#   3. Access at http://localhost:3000
+#   4. Set up Cloudflare Tunnel for HTTPS
+# =============================================
+
 services:
+  # --- Next.js Chatbot App ---
   chatbot:
     build:
       context: .
@@ -8,3 +19,28 @@ services:
     env_file:
       - .env.local
     restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # --- PostgreSQL Database ---
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: eeca_chatbot
+      POSTGRES_USER: eeca_user
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme_in_production}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./supabase/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U eeca_user -d eeca_chatbot"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:

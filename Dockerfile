@@ -1,7 +1,7 @@
 # =============================================
 # Stage 1: Install dependencies
 # =============================================
-FROM node:18-alpine AS deps
+FROM node:20-alpine AS deps
 WORKDIR /app
 
 COPY package.json package-lock.json ./
@@ -10,7 +10,7 @@ RUN npm ci --only=production
 # =============================================
 # Stage 2: Build the application
 # =============================================
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 WORKDIR /app
 
 COPY package.json package-lock.json ./
@@ -19,12 +19,12 @@ RUN npm ci
 COPY . .
 
 # Build arguments for env vars (passed at build time)
-ARG GROQ_API_KEY
+ARG OPENAI_API_KEY
 ARG NEXT_PUBLIC_SUPABASE_URL
 ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
 ARG SUPABASE_SERVICE_ROLE_KEY
 
-ENV GROQ_API_KEY=$GROQ_API_KEY
+ENV OPENAI_API_KEY=$OPENAI_API_KEY
 ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
 ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY
 ENV SUPABASE_SERVICE_ROLE_KEY=$SUPABASE_SERVICE_ROLE_KEY
@@ -34,7 +34,7 @@ RUN npm run build
 # =============================================
 # Stage 3: Production runner
 # =============================================
-FROM node:18-alpine AS runner
+FROM node:20-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
