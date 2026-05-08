@@ -1,26 +1,26 @@
-# 🚀 VPS Deployment Guide — GreenCloud
+# 🚀 VPS Deployment Guide — VPS Malaysia
 
-Step-by-step guide to deploy the EECA Chatbot on a GreenCloud VPS.
+Step-by-step guide to deploy the EECA Chatbot on a VPS Malaysia PLUS server.
 
 ---
 
-## Step 1: Buy a VPS
-
-Go to [greencloudvps.com](https://greencloudvps.com) and buy:
+## Server Details
 
 | Setting | Value |
 |---------|-------|
-| **Location** | Singapore |
-| **OS** | Ubuntu 22.04 LTS |
-| **RAM** | 2 GB |
-| **Storage** | 40 GB SSD |
-| **Plan** | ~$10-15/mo |
-
-After purchase, you'll receive an **IP address** and **root password** by email.
+| **Provider** | VPS Malaysia |
+| **Plan** | PLUS (RM 54.90/mo) |
+| **OS** | Debian 13 |
+| **RAM** | 2 GB (+1 core free upgrade available) |
+| **CPU** | 3 cores vCPU |
+| **Storage** | 60 GB NVMe SSD |
+| **Bandwidth** | 3 TB |
+| **IP** | Dedicated |
+| **Control Panel** | [vps2.vpsmalaysia.com.my](https://vps2.vpsmalaysia.com.my/) |
 
 ---
 
-## Step 2: Connect to Your VPS
+## Step 1: Connect to Your VPS
 
 Open PowerShell on your PC:
 
@@ -28,102 +28,100 @@ Open PowerShell on your PC:
 ssh root@YOUR_VPS_IP
 ```
 
-Enter the password from the email.
+Enter the root password from your welcome email.
 
 ---
 
-## Step 3: Install Docker
-
-Run these commands on the VPS:
+## Step 2: Update System & Install Docker
 
 ```bash
-# Update system
-apt update && apt upgrade -y
+apt update && apt upgrade -y && curl -fsSL https://get.docker.com | sh && apt install -y docker-compose-plugin git && docker --version
+```
 
-# Install Docker
-curl -fsSL https://get.docker.com | sh
+Wait ~2 minutes. You should see `Docker version 2x.x.x` at the end.
 
-# Install Docker Compose
-apt install docker-compose-plugin -y
+---
 
-# Verify
-docker --version
-docker compose version
+## Step 3: Clone the Repo
+
+```bash
+cd /opt && git clone https://github.com/izzunmustaqim/Compliance-Readiness-Assessment-Tool.git chatbot && cd chatbot
 ```
 
 ---
 
-## Step 4: Clone Your Repo
-
-```bash
-# Install Git
-apt install git -y
-
-# Clone
-cd /opt
-git clone https://github.com/izzunmustaqim/Compliance-Readiness-Assessment-Tool.git chatbot
-cd chatbot
-```
-
----
-
-## Step 5: Set Up Environment Variables
+## Step 4: Create Environment File
 
 ```bash
 nano .env.local
 ```
 
-Paste this (replace with your real keys):
+Paste your environment variables:
 
 ```env
 # AI Provider
-OPENAI_API_KEY=sk-proj-your-key-here
+OPENAI_API_KEY=your_openai_api_key
 
-# Supabase (keep using cloud Supabase)
-NEXT_PUBLIC_SUPABASE_URL=https://rdltudmxlfeeiafoiqky.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
-SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+# Backup AI Provider
+GROQ_API_KEY=your_groq_api_key
 
-# Database password (for local PostgreSQL if used)
-DB_PASSWORD=your_secure_password_here
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
 ```
 
 Save: `Ctrl+X` → `Y` → `Enter`
 
 ---
 
-## Step 6: Build and Run
+## Step 5: Build & Run
 
 ```bash
 docker compose up -d --build
 ```
 
-Wait 2-3 minutes for the build. Check status:
+Wait ~5 minutes for the build. Then check:
 
 ```bash
 docker compose ps
-docker compose logs chatbot
 ```
 
 Your app is now running at `http://YOUR_VPS_IP:3000`
 
 ---
 
-## Step 7: Set Up HTTPS with Cloudflare Tunnel (Free)
+## Step 6: Secure Your Server
 
-### 7a. Create a Cloudflare account
-Go to [cloudflare.com](https://cloudflare.com) and add `sandhurstadvisory.com.my`
-
-### 7b. Install Cloudflare Tunnel on VPS
+### 6a. Change Root Password
 
 ```bash
-# Install cloudflared
+passwd
+```
+
+### 6b. Enable Firewall
+
+```bash
+apt install -y ufw && ufw allow 22 && ufw allow 3000 && ufw enable
+```
+
+Type `y` when asked. This blocks all ports except SSH (22) and the chatbot (3000).
+
+---
+
+## Step 7: Set Up Custom Domain (Optional)
+
+If you have a domain (e.g. `sandhurstadvisory.com.my`):
+
+### 7a. Install Cloudflare Tunnel
+
+```bash
 curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg | gpg --dearmor -o /usr/share/keyrings/cloudflare-main.gpg
-echo "deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared jammy main" | tee /etc/apt/sources.list.d/cloudflared.list
+echo "deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared bookworm main" | tee /etc/apt/sources.list.d/cloudflared.list
 apt update && apt install cloudflared -y
 ```
 
-### 7c. Login and create tunnel
+### 7b. Login & Create Tunnel
 
 ```bash
 cloudflared tunnel login
@@ -131,7 +129,7 @@ cloudflared tunnel create eeca-chatbot
 cloudflared tunnel route dns eeca-chatbot eeca.sandhurstadvisory.com.my
 ```
 
-### 7d. Configure tunnel
+### 7c. Configure Tunnel
 
 ```bash
 nano ~/.cloudflared/config.yml
@@ -149,7 +147,7 @@ ingress:
   - service: http_status:404
 ```
 
-### 7e. Start tunnel as a service
+### 7d. Start Tunnel as Service
 
 ```bash
 cloudflared service install
@@ -180,7 +178,6 @@ docker compose up -d --build
 |---------|-------------|
 | `docker compose ps` | Check if services are running |
 | `docker compose logs chatbot` | View app logs |
-| `docker compose logs db` | View database logs |
 | `docker compose down` | Stop everything |
 | `docker compose up -d --build` | Rebuild and restart |
 | `docker compose restart chatbot` | Restart app only |
@@ -193,6 +190,18 @@ docker compose up -d --build
 |---------|----------|
 | App won't start | `docker compose logs chatbot` — check for errors |
 | Port 3000 blocked | `ufw allow 3000` |
-| Database connection error | `docker compose logs db` — check PostgreSQL |
-| Out of memory | Upgrade VPS to 2 GB RAM |
+| Out of memory | `docker compose down` then `docker compose up -d` |
 | Tunnel not working | `systemctl restart cloudflared` |
+| Need to rebuild | `docker compose up -d --build` |
+| Check disk space | `df -h` |
+| Check memory usage | `free -m` |
+
+---
+
+## VPS Control Panel
+
+| Setting | Value |
+|---------|-------|
+| **URL** | [vps2.vpsmalaysia.com.my](https://vps2.vpsmalaysia.com.my/) |
+| **Features** | Start, Reboot, Shutdown, Reset Password, VNC |
+| **Support** | Open ticket at VPS Malaysia |
