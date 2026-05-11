@@ -23,9 +23,9 @@ describe('System Prompt', () => {
   });
 
   it('should define section A (awareness), section B (scored), and section C (user info)', () => {
-    expect(SYSTEM_PROMPT).toContain('section A');
-    expect(SYSTEM_PROMPT).toContain('Section B');
-    expect(SYSTEM_PROMPT).toContain('Section C');
+    expect(SYSTEM_PROMPT).toContain('SECTION A');
+    expect(SYSTEM_PROMPT).toContain('SECTION B');
+    expect(SYSTEM_PROMPT).toContain('User Info, Not Scored');
     expect(SYSTEM_PROMPT).toContain('Not Scored');
     expect(SYSTEM_PROMPT).toContain('Scored');
   });
@@ -57,7 +57,7 @@ describe('System Prompt', () => {
   });
 
   it('should instruct one question at a time', () => {
-    expect(SYSTEM_PROMPT).toContain('ONE AT A TIME');
+    expect(SYSTEM_PROMPT).toContain('ONE question at a time');
   });
 
   it('should use OPTION tag format for buttons', () => {
