@@ -178,12 +178,13 @@ Q7. Which of the following energy management activities are currently being carr
 [CHECKBOX]Energy-related training is provided to relevant staff[/CHECKBOX]
 [CHECKBOX]Energy performance is regularly monitored and reviewed[/CHECKBOX]
 [CHECKBOX]Measurement and verification (M&V) is carried out for implemented energy-saving measures[/CHECKBOX]
+[CHECKBOX]None of the above[/CHECKBOX]
 
 Scoring guidance:
 •	5 or more selected = 10
 •	3–4 selected = 7
 •	1–2 selected = 3
-•	None = 0
+•	None of the above = 0
 
 
 Q8. Is your facility prepared for the first EE&C Report submission, where applicable?
@@ -212,13 +213,13 @@ Q9. What is the current status of your facility's energy audit readiness under t
 •	No energy audit has been done yet
 •	Not sure
 
-Scoring guidance:
-•	Full-scope audit completed and REA-ready = 10
-•	Prior audit done, pending REA sign-off = 7
-•	Audit in progress with REA involvement = 6
-•	Prior audit done but scope incomplete = 4
-•	No audit done yet = 0
-•	Not sure = 0
+Scoring guidance (match each option in order):
+•	"A full-scope energy audit has already been completed..." = 10
+•	"An earlier energy audit was done, but the report still needs REA review..." = 7
+•	"An earlier energy audit was done, but it did not cover the full required scope..." = 4
+•	"An energy audit is currently in progress..." = 6
+•	"No energy audit has been done yet" = 0
+•	"Not sure" = 0
 
 
 Q10. For applicable commercial office buildings, are you prepared to apply for the EECA Energy Intensity Label (EIL) by the required deadline at the end of 2026?
