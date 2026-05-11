@@ -25,10 +25,16 @@ Step-by-step guide to deploy the EECA Chatbot on a VPS Malaysia PLUS server.
 Open PowerShell on your PC:
 
 ```bash
+# First time (default port 22)
 ssh root@YOUR_VPS_IP
+
+# After port change (Step 6a)
+ssh -p 2222 root@YOUR_VPS_IP
 ```
 
 Enter the root password from your welcome email.
+
+> ⚠️ **Important:** After completing Step 6a, always use `-p 2222` (or your chosen port) to connect.
 
 ---
 
@@ -93,19 +99,54 @@ Your app is now running at `http://YOUR_VPS_IP:3000`
 
 ## Step 6: Secure Your Server
 
-### 6a. Change Root Password
+> ⚠️ **Do this immediately after first login.** Port 22 is the #1 target for brute-force attacks.
+
+### 6a. Change SSH Port (Critical)
+
+```bash
+nano /etc/ssh/sshd_config
+```
+
+Find the line `#Port 22` or `Port 22` and change it to:
+
+```
+Port 2222
+```
+
+Save: `Ctrl+X` → `Y` → `Enter`
+
+Then allow the new port and restart SSH:
+
+```bash
+apt install -y ufw && ufw allow 2222/tcp && systemctl restart sshd
+```
+
+> ⚠️ **Do NOT close this session yet!** Open a **second terminal** and test:
+> ```bash
+> ssh -p 2222 root@YOUR_VPS_IP
+> ```
+> Only proceed if the new connection works.
+
+To verify the port was changed:
+
+```bash
+grep -i "^Port" /etc/ssh/sshd_config
+# Should output: Port 2222
+```
+
+### 6b. Change Root Password
 
 ```bash
 passwd
 ```
 
-### 6b. Enable Firewall
+### 6c. Enable Firewall
 
 ```bash
-apt install -y ufw && ufw allow 22 && ufw allow 3000 && ufw enable
+ufw allow 3000 && ufw deny 22 && ufw enable
 ```
 
-Type `y` when asked. This blocks all ports except SSH (22) and the chatbot (3000).
+Type `y` when asked. This blocks all ports except SSH (2222) and the chatbot (3000).
 
 ---
 
@@ -164,7 +205,7 @@ systemctl enable cloudflared
 When you push new code to GitHub:
 
 ```bash
-ssh root@YOUR_VPS_IP
+ssh -p 2222 root@YOUR_VPS_IP
 cd /opt/chatbot
 git pull
 docker compose up -d --build
@@ -190,9 +231,11 @@ docker compose up -d --build
 |---------|----------|
 | App won't start | `docker compose logs chatbot` — check for errors |
 | Port 3000 blocked | `ufw allow 3000` |
+| Can't SSH after port change | Use VPS control panel VNC to fix `/etc/ssh/sshd_config` |
 | Out of memory | `docker compose down` then `docker compose up -d` |
 | Tunnel not working | `systemctl restart cloudflared` |
 | Need to rebuild | `docker compose up -d --build` |
+| Check SSH port | `grep -i "^Port" /etc/ssh/sshd_config` |
 | Check disk space | `df -h` |
 | Check memory usage | `free -m` |
 
