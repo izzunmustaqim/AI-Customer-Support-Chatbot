@@ -94,22 +94,13 @@ export async function POST(req: Request) {
 
       if (userTextContent) {
         try {
-          const { data: savedMsg } = await supabase
+          await supabase
             .from('messages')
             .insert({
               conversation_id: conversationId,
               role: 'user',
               content: userTextContent,
-            })
-            .select('id')
-            .single();
-
-          // Step 3: Detect and log intent (disabled for now — re-enable when needed)
-          // if (conversationId && savedMsg?.id) {
-          //   import('@/lib/ai/intent-detector').then(({ detectAndLogIntent }) => {
-          //     detectAndLogIntent(userTextContent, conversationId!).catch(() => {});
-          //   }).catch(() => {});
-          // }
+            });
         } catch (e) {
           console.warn('DB logging skipped:', e);
         }
@@ -138,6 +129,7 @@ export async function POST(req: Request) {
         messages: modelMessages,
         onFinish: async ({ text }) => {
           if (supabase) {
+            // Save assistant message
             try {
               await supabase.from('messages').insert({
                 conversation_id: conversationId,
@@ -148,11 +140,53 @@ export async function POST(req: Request) {
               console.warn('DB logging skipped:', e);
             }
 
+            // Auto-extract assessment score when the report is shown
+            try {
+              const scoreMatch = text.match(/(\d{1,3})\s*\/\s*100/);
+              const isReport = scoreMatch && 
+                (text.includes('Readiness') || text.includes('Score')) && 
+                text.length > 300;
+
+              if (isReport && conversationId) {
+                const totalScore = parseInt(scoreMatch[1], 10);
+                let readinessBand: string;
+                if (totalScore >= 80) readinessBand = 'High';
+                else if (totalScore >= 60) readinessBand = 'Moderate';
+                else if (totalScore >= 40) readinessBand = 'Low';
+                else readinessBand = 'Critical';
+
+                // Extract per-question scores from the breakdown table
+                const qScores: number[] = [];
+                for (let i = 1; i <= 10; i++) {
+                  const qPattern = new RegExp(`Q${i}[^\\d]*(\\d{1,2})`, 'i');
+                  const qMatch = text.match(qPattern);
+                  qScores.push(qMatch ? parseInt(qMatch[1], 10) : 0);
+                }
+
+                await supabase.from('assessment_results').insert({
+                  conversation_id: conversationId,
+                  total_score: totalScore,
+                  readiness_band: readinessBand,
+                  q1_score: qScores[0],
+                  q2_score: qScores[1],
+                  q3_score: qScores[2],
+                  q4_score: qScores[3],
+                  q5_score: qScores[4],
+                  q6_score: qScores[5],
+                  q7_score: qScores[6],
+                  q8_score: qScores[7],
+                  q9_score: qScores[8],
+                  q10_score: qScores[9],
+                });
+              }
+            } catch (e) {
+              console.warn('Assessment result extraction skipped:', e);
+            }
+
             // Auto-extract contact info when Section C is completed
             try {
               const thankYouPattern = /thank you for the information|we will send|within 2 working days/i;
               if (thankYouPattern.test(text) && conversationId) {
-                // Get the last user message (contains their contact info)
                 const lastUserMsg = messages
                   .filter((m: { role: string }) => m.role === 'user')
                   .pop();
@@ -162,12 +196,10 @@ export async function POST(req: Request) {
                   .join('') || '';
 
                 if (userInfo) {
-                  // Extract fields using patterns
                   const emailMatch = userInfo.match(/[\w.-]+@[\w.-]+\.\w+/);
                   const phoneMatch = userInfo.match(/\+?[\d\s-]{8,}/);
                   const lines = userInfo.split(/[\n,]+/).map((l: string) => l.trim()).filter(Boolean);
 
-                  // First non-email, non-phone line is likely the name
                   const name = lines.find((l: string) =>
                     !l.match(/[\w.-]+@[\w.-]+\.\w+/) &&
                     !l.match(/\+?[\d\s-]{8,}/) &&

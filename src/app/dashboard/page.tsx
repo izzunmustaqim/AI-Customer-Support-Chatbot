@@ -1,5 +1,4 @@
 import { StatCard } from '@/components/dashboard/stat-card';
-import { IntentChart } from '@/components/dashboard/intent-chart';
 import './dashboard.css';
 
 interface AnalyticsData {
@@ -7,7 +6,9 @@ interface AnalyticsData {
   totalMessages: number;
   avgRating: number;
   totalContacts: number;
-  topIntents: { intent: string; count: number }[];
+  totalAssessments: number;
+  avgScore: number;
+  bandCounts: Record<string, number>;
   recentContacts: {
     id: string;
     name: string;
@@ -40,15 +41,29 @@ async function getAnalytics(): Promise<AnalyticsData> {
       totalMessages: 0,
       avgRating: 0,
       totalContacts: 0,
-      topIntents: [],
+      totalAssessments: 0,
+      avgScore: 0,
+      bandCounts: { High: 0, Moderate: 0, Low: 0, Critical: 0 },
       recentContacts: [],
       dailyCounts: {},
     };
   }
 }
 
+const BAND_COLORS: Record<string, string> = {
+  High: '#4CAF50',
+  Moderate: '#FF9800',
+  Low: '#f44336',
+  Critical: '#9C27B0',
+};
+
 export default async function DashboardPage() {
   const data = await getAnalytics();
+
+  const totalBandEntries = Object.values(data.bandCounts).reduce(
+    (a, b) => a + b,
+    0
+  );
 
   return (
     <div className="dashboard">
@@ -56,7 +71,7 @@ export default async function DashboardPage() {
         <div>
           <h1>Analytics Dashboard</h1>
           <p className="dashboard-subtitle">
-            Monitor your AI chatbot performance and customer insights
+            Monitor your EECA assessment performance and customer insights
           </p>
         </div>
         <a href="/" className="btn btn-ghost" id="dashboard-back-btn">
@@ -70,42 +85,73 @@ export default async function DashboardPage() {
           title="Total Conversations"
           value={data.totalConversations}
           icon="💬"
-          trend="+12%"
         />
         <StatCard
-          title="Total Messages"
-          value={data.totalMessages}
-          icon="📨"
-          trend="+24%"
+          title="Assessments Completed"
+          value={data.totalAssessments}
+          icon="📋"
+        />
+        <StatCard
+          title="Avg. Score"
+          value={data.avgScore > 0 ? `${data.avgScore}/100` : 'N/A'}
+          icon="📊"
         />
         <StatCard
           title="Avg. Rating"
           value={data.avgRating > 0 ? `${data.avgRating}/5` : 'N/A'}
           icon="⭐"
-          trend="+0.3"
         />
         <StatCard
           title="Contacts Captured"
           value={data.totalContacts}
           icon="👥"
-          trend="+8%"
+        />
+        <StatCard
+          title="Total Messages"
+          value={data.totalMessages}
+          icon="📨"
         />
       </section>
 
       {/* Charts Row */}
       <section className="charts-row">
-        {/* Intent Distribution */}
-        <div className="glass-card chart-card" id="dashboard-intents">
-          <h3>Top Detected Intents</h3>
+        {/* Readiness Band Distribution */}
+        <div className="glass-card chart-card" id="dashboard-bands">
+          <h3>Readiness Band Distribution</h3>
           <p className="chart-subtitle">
-            What your customers are asking about
+            Assessment outcomes by readiness level
           </p>
-          {data.topIntents.length > 0 ? (
-            <IntentChart intents={data.topIntents} />
+          {totalBandEntries > 0 ? (
+            <div className="band-chart">
+              {Object.entries(data.bandCounts).map(([band, count]) => (
+                <div key={band} className="band-item">
+                  <div className="band-info">
+                    <span
+                      className="band-dot"
+                      style={{ backgroundColor: BAND_COLORS[band] }}
+                    />
+                    <span className="band-name">{band}</span>
+                    <span className="band-count">{count}</span>
+                  </div>
+                  <div className="band-bar-wrapper">
+                    <div
+                      className="band-bar"
+                      style={{
+                        width: `${Math.max(
+                          (count / totalBandEntries) * 100,
+                          2
+                        )}%`,
+                        backgroundColor: BAND_COLORS[band],
+                      }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
           ) : (
             <div className="empty-state">
-              <span>📊</span>
-              <p>Intent data will appear once conversations start</p>
+              <span>📋</span>
+              <p>Assessment data will appear once users complete assessments</p>
             </div>
           )}
         </div>

@@ -5,7 +5,6 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { StatCard } from '@/components/dashboard/stat-card';
-import { IntentChart } from '@/components/dashboard/intent-chart';
 
 describe('StatCard Component', () => {
   it('should render title', () => {
@@ -37,44 +36,5 @@ describe('StatCard Component', () => {
     const { container } = render(<StatCard title="Test" value={5} icon="📊" />);
     const trendEl = container.querySelector('[class*="trend"]');
     expect(trendEl).toBeNull();
-  });
-});
-
-describe('IntentChart Component', () => {
-  const mockIntents = [
-    { intent: 'pricing_inquiry', count: 25 },
-    { intent: 'support_request', count: 18 },
-    { intent: 'demo_request', count: 12 },
-  ];
-
-  it('should render all intent rows', () => {
-    render(<IntentChart intents={mockIntents} />);
-    expect(screen.getByText('25')).toBeInTheDocument();
-    expect(screen.getByText('18')).toBeInTheDocument();
-    expect(screen.getByText('12')).toBeInTheDocument();
-  });
-
-  it('should display friendly labels', () => {
-    render(<IntentChart intents={mockIntents} />);
-    expect(screen.getByText('💰 Pricing')).toBeInTheDocument();
-    expect(screen.getByText('🛠️ Support')).toBeInTheDocument();
-    expect(screen.getByText('🎯 Demo')).toBeInTheDocument();
-  });
-
-  it('should render bars with correct proportions', () => {
-    const { container } = render(<IntentChart intents={mockIntents} />);
-    const bars = container.querySelectorAll('[class*="bar"]');
-    expect(bars.length).toBeGreaterThan(0);
-  });
-
-  it('should handle single intent', () => {
-    render(<IntentChart intents={[{ intent: 'complaint', count: 5 }]} />);
-    expect(screen.getByText('5')).toBeInTheDocument();
-  });
-
-  it('should handle unknown intent labels gracefully', () => {
-    render(<IntentChart intents={[{ intent: 'unknown_type', count: 3 }]} />);
-    expect(screen.getByText('unknown_type')).toBeInTheDocument();
-    expect(screen.getByText('3')).toBeInTheDocument();
   });
 });

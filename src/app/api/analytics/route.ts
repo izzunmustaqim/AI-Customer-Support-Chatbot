@@ -26,21 +26,6 @@ export async function GET() {
           feedbackData.length
         : 0;
 
-    // Top intents
-    const { data: intentsData } = await supabaseAdmin
-      .from('detected_intents')
-      .select('intent');
-
-    const intentCounts: Record<string, number> = {};
-    intentsData?.forEach((item) => {
-      intentCounts[item.intent] = (intentCounts[item.intent] || 0) + 1;
-    });
-
-    const topIntents = Object.entries(intentCounts)
-      .sort(([, a], [, b]) => b - a)
-      .slice(0, 8)
-      .map(([intent, count]) => ({ intent, count }));
-
     // Total contacts captured
     const { count: totalContacts } = await supabaseAdmin
       .from('contact_submissions')
@@ -52,6 +37,35 @@ export async function GET() {
       .select('*')
       .order('submitted_at', { ascending: false })
       .limit(10);
+
+    // Assessment results — score distribution by band
+    const { data: resultsData } = await supabaseAdmin
+      .from('assessment_results')
+      .select('total_score, readiness_band, completed_at');
+
+    const bandCounts: Record<string, number> = {
+      High: 0,
+      Moderate: 0,
+      Low: 0,
+      Critical: 0,
+    };
+    let totalAssessments = 0;
+    let avgScore = 0;
+
+    if (resultsData && resultsData.length > 0) {
+      totalAssessments = resultsData.length;
+      avgScore =
+        Math.round(
+          (resultsData.reduce((sum, r) => sum + r.total_score, 0) /
+            totalAssessments) *
+            10
+        ) / 10;
+      resultsData.forEach((r) => {
+        if (r.readiness_band in bandCounts) {
+          bandCounts[r.readiness_band]++;
+        }
+      });
+    }
 
     // Conversations over time (last 7 days)
     const sevenDaysAgo = new Date();
@@ -77,7 +91,9 @@ export async function GET() {
       totalMessages: totalMessages || 0,
       avgRating: Math.round(avgRating * 10) / 10,
       totalContacts: totalContacts || 0,
-      topIntents,
+      totalAssessments,
+      avgScore,
+      bandCounts,
       recentContacts: recentContacts || [],
       dailyCounts,
     });
