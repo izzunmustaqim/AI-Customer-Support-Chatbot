@@ -37,10 +37,11 @@ function parseTags(text: string): {
     checkboxes.push(match[1].trim());
   }
 
-  // Remove both tag types from text
+  // Remove both tag types and completion marker from text
   const cleanText = text
     .replace(/\[OPTION\].*?\[\/OPTION\]/g, '')
     .replace(/\[CHECKBOX\].*?\[\/CHECKBOX\]/g, '')
+    .replace(/\[ASSESSMENT_COMPLETE\]/g, '')
     .replace(/\n{3,}/g, '\n\n')
     .trim();
 

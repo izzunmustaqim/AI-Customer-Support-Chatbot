@@ -29,20 +29,27 @@ export default function AssessmentPage() {
 
   const isLoading = status === 'submitted' || status === 'streaming';
 
+  // Detect if assessment is complete
+  const isComplete = messages.some(
+    (m) => m.role === 'assistant' && m.parts?.some(
+      (p) => p.type === 'text' && (p as { type: 'text'; text: string }).text.includes('[ASSESSMENT_COMPLETE]')
+    )
+  );
+
   const handleSendMessage = useCallback(
     async (text: string) => {
-      if (!text.trim() || isLoading) return;
+      if (!text.trim() || isLoading || isComplete) return;
       await sendMessage({ text });
     },
-    [sendMessage, isLoading]
+    [sendMessage, isLoading, isComplete]
   );
 
   const handleOptionClick = useCallback(
     async (optionText: string) => {
-      if (isLoading) return;
+      if (isLoading || isComplete) return;
       await sendMessage({ text: optionText });
     },
-    [sendMessage, isLoading]
+    [sendMessage, isLoading, isComplete]
   );
 
   return (
@@ -67,7 +74,7 @@ export default function AssessmentPage() {
             <h1 className="assessment-title">EECA Compliance & Readiness Checklist</h1>
             <span className="assessment-status">
               <span className="assessment-status-dot" />
-              {status === 'streaming' ? 'Thinking...' : status === 'submitted' ? 'Connecting...' : 'Online'}
+              {isComplete ? 'Session Ended' : status === 'streaming' ? 'Thinking...' : status === 'submitted' ? 'Connecting...' : 'Online'}
             </span>
           </div>
         </div>
@@ -100,10 +107,18 @@ export default function AssessmentPage() {
         </div>
       )}
 
-      {/* Input */}
+      {/* Input or Completion Banner */}
       <div className="assessment-input-wrapper">
         <div className="assessment-input-inner">
-          <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} />
+          {isComplete ? (
+            <div className="assessment-complete-banner">
+              <span className="assessment-complete-icon">✅</span>
+              <span>Assessment complete. Thank you for participating.</span>
+              <a href="/" className="assessment-complete-link">Return to Home</a>
+            </div>
+          ) : (
+            <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} />
+          )}
         </div>
       </div>
     </div>

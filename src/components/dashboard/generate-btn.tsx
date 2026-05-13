@@ -10,17 +10,25 @@ interface GenerateReportBtnProps {
 }
 
 export function GenerateReportBtn({
-  assessmentId,
-  reportStatus,
+  // assessmentId,
+  // reportStatus,
   wantsReport,
 }: GenerateReportBtnProps) {
-  const [status, setStatus] = useState(reportStatus);
-  const [loading, setLoading] = useState(false);
-
   // No button if user declined the report
   if (wantsReport === false) {
     return null;
   }
+
+  // --- Report generation temporarily disabled ---
+  return (
+    <button className="report-btn report-btn-disabled" disabled title="Report generation coming soon">
+      📄 Coming Soon
+    </button>
+  );
+
+  /* --- Re-enable by uncommenting below and removing the above return ---
+  const [status, setStatus] = useState(reportStatus);
+  const [loading, setLoading] = useState(false);
 
   const handleGenerate = async () => {
     setLoading(true);
@@ -33,14 +41,13 @@ export function GenerateReportBtn({
       });
 
       if (res.ok) {
-        // Download the PDF
         const blob = await res.blob();
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
         const disposition = res.headers.get('Content-Disposition');
         const match = disposition?.match(/filename="(.+)"/);
-        a.download = match?.[1] || `EECA_Report.pdf`;
+        a.download = match?.[1] || `EECA_Report.docx`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -89,4 +96,5 @@ export function GenerateReportBtn({
       📄 Generate
     </button>
   );
+  */
 }

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '@/lib/supabase/server';
-import { buildReportPDF } from '@/lib/pdf/build-report';
+import { buildReportDOCX } from '@/lib/docx/build-report-docx';
 
 export async function POST(req: Request) {
   try {
@@ -20,6 +20,7 @@ export async function POST(req: Request) {
       .single();
 
     if (fetchError || !result) {
+      console.error('[Report] Assessment fetch error:', fetchError);
       return NextResponse.json({ error: 'Assessment not found' }, { status: 404 });
     }
 
@@ -44,22 +45,14 @@ export async function POST(req: Request) {
           const { text } = await generateText({
             model: openai('gpt-4o-mini'),
             system: `You are an EECA (Energy Efficiency and Conservation Act) compliance expert at Sandhurst Advisory.
-Based on the user's assessment results and conversation history, provide a detailed analysis report.
+Based on the user's assessment results and conversation history, provide a concise overall summary of their compliance readiness.
 
-Format your response with these sections:
-## Gap Analysis
-Identify 3-5 key compliance gaps based on low-scoring areas.
+Write 2-3 paragraphs covering:
+1. Current readiness position and key strengths
+2. Critical gaps and areas requiring immediate attention
+3. High-level recommended next steps
 
-## Recommended Actions
-Provide specific, actionable recommendations for each gap.
-
-## Compliance Timeline
-Suggest a realistic timeline for achieving compliance.
-
-## Risk Assessment
-Outline potential risks of non-compliance.
-
-Keep the tone professional and advisory. Use bullet points for clarity.`,
+Keep the tone professional and advisory. Do NOT use markdown headers or bullet points — write in flowing paragraph form.`,
             prompt: `The user "${result.user_name || 'Unknown'}" scored ${result.total_score}/100 (${result.readiness_band} readiness).
 
 Individual scores:
@@ -77,7 +70,7 @@ Q10 (Management): ${result.q10_score}/10
 Conversation context:
 ${conversationSummary.substring(0, 3000)}
 
-Generate a detailed compliance analysis report.`,
+Generate a professional overall summary for the report.`,
           });
 
           aiAnalysis = text;
@@ -87,8 +80,8 @@ Generate a detailed compliance analysis report.`,
       }
     }
 
-    // 3. Build the PDF
-    const pdfBuffer = buildReportPDF({
+    // 3. Build the DOCX
+    const docxBuffer = await buildReportDOCX({
       userName: result.user_name || 'Assessment User',
       userDesignation: result.user_designation,
       userEmail: result.report_email || '',
@@ -110,14 +103,14 @@ Generate a detailed compliance analysis report.`,
       .update({ report_status: 'sent', report_sent_at: new Date().toISOString() })
       .eq('id', assessmentId);
 
-    const fileName = `EECA_Report_${result.user_name?.replace(/\s+/g, '_') || 'Assessment'}.pdf`;
+    const fileName = `EECA_Report_${result.user_name?.replace(/\s+/g, '_') || 'Assessment'}.docx`;
 
-    console.log(`[Report] Generated PDF for assessment ${assessmentId}`);
+    console.log(`[Report] Generated DOCX for assessment ${assessmentId}`);
 
-    // 5. Return PDF as downloadable file
-    return new Response(new Uint8Array(pdfBuffer), {
+    // 5. Return DOCX as downloadable file
+    return new Response(new Uint8Array(docxBuffer), {
       headers: {
-        'Content-Type': 'application/pdf',
+        'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         'Content-Disposition': `attachment; filename="${fileName}"`,
       },
     });

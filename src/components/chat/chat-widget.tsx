@@ -37,6 +37,13 @@ export function ChatWidget() {
 
   const isLoading = status === 'submitted' || status === 'streaming';
 
+  // Detect if assessment is complete
+  const isComplete = messages.some(
+    (m) => m.role === 'assistant' && m.parts?.some(
+      (p) => p.type === 'text' && (p as { type: 'text'; text: string }).text.includes('[ASSESSMENT_COMPLETE]')
+    )
+  );
+
   // Show feedback after every 5 AI responses
   useEffect(() => {
     if (messageCount > 0 && messageCount % 5 === 0 && !showFeedback) {
@@ -61,21 +68,21 @@ export function ChatWidget() {
 
   const handleSendMessage = useCallback(
     async (text: string) => {
-      if (!text.trim() || isLoading) return;
+      if (!text.trim() || isLoading || isComplete) return;
 
       await sendMessage({
         text,
       });
     },
-    [sendMessage, isLoading]
+    [sendMessage, isLoading, isComplete]
   );
 
   const handleOptionClick = useCallback(
     async (optionText: string) => {
-      if (isLoading) return;
+      if (isLoading || isComplete) return;
       await sendMessage({ text: optionText });
     },
-    [sendMessage, isLoading]
+    [sendMessage, isLoading, isComplete]
   );
 
   return (
@@ -116,7 +123,7 @@ export function ChatWidget() {
                 <h3 className={styles.headerTitle}>EECA Assessment</h3>
                 <span className={styles.headerStatus}>
                   <span className={styles.statusDot} />
-                  {status === 'streaming' ? 'Thinking...' : status === 'submitted' ? 'Connecting...' : 'Online'}
+                  {isComplete ? 'Session Ended' : status === 'streaming' ? 'Thinking...' : status === 'submitted' ? 'Connecting...' : 'Online'}
                 </span>
               </div>
             </div>
@@ -188,10 +195,17 @@ export function ChatWidget() {
           )}
 
           {/* Input */}
-          <ChatInput
-            onSendMessage={handleSendMessage}
-            isLoading={isLoading}
-          />
+          {isComplete ? (
+            <div className={styles.completeBanner}>
+              <span>✅</span>
+              <span>Assessment complete.</span>
+            </div>
+          ) : (
+            <ChatInput
+              onSendMessage={handleSendMessage}
+              isLoading={isLoading}
+            />
+          )}
         </div>
       )}
     </>
