@@ -104,6 +104,23 @@ export async function POST(req: Request) {
         } catch (e) {
           console.warn('DB logging skipped:', e);
         }
+
+        // Detect detailed report opt-in/opt-out and update assessment_results
+        if (conversationId) {
+          try {
+            const wantsReport = /yes.*detailed.*report.*email/i.test(userTextContent);
+            const declinesReport = /no.*do not want.*detailed/i.test(userTextContent);
+
+            if (wantsReport || declinesReport) {
+              await supabase
+                .from('assessment_results')
+                .update({ wants_detailed_report: wantsReport })
+                .eq('conversation_id', conversationId);
+            }
+          } catch (e) {
+            console.warn('Report preference update skipped:', e);
+          }
+        }
       }
     }
 
@@ -142,10 +159,10 @@ export async function POST(req: Request) {
 
             // Auto-extract assessment score when the report is shown
             try {
-              const scoreMatch = text.match(/(\d{1,3})\s*\/\s*100/);
+              const scoreMatch = text.match(/(\d{1,3})\s*[/\/]\s*100/);
               const isReport = scoreMatch && 
-                (text.includes('Readiness') || text.includes('Score')) && 
-                text.length > 300;
+                (text.includes('Readiness') || text.includes('Score') || text.includes('readiness')) && 
+                text.length > 200;
 
               if (isReport && conversationId) {
                 const totalScore = parseInt(scoreMatch[1], 10);
@@ -156,14 +173,31 @@ export async function POST(req: Request) {
                 else readinessBand = 'Critical';
 
                 // Extract per-question scores from the breakdown table
+                // Strategy: find lines containing Q1-Q10 and grab the LAST number on that line
+                // This avoids matching "10" from "Q1/Q10" labels
                 const qScores: number[] = [];
                 for (let i = 1; i <= 10; i++) {
-                  const qPattern = new RegExp(`Q${i}[^\\d]*(\\d{1,2})`, 'i');
-                  const qMatch = text.match(qPattern);
-                  qScores.push(qMatch ? parseInt(qMatch[1], 10) : 0);
+                  // Match lines like "| Q1 | Industrial plant | 10 |" or "Q1. Facility Type — 10"
+                  const linePattern = new RegExp(`Q${i}[^\\n]*?(\\d{1,2})\\s*(?:\\||$|\\n)`, 'im');
+                  const lineMatch = text.match(linePattern);
+                  
+                  if (lineMatch) {
+                    // Find all numbers in the matched line segment and take the last one (the score)
+                    const allNumbers = lineMatch[0].match(/\d+/g);
+                    const score = allNumbers ? parseInt(allNumbers[allNumbers.length - 1], 10) : 0;
+                    qScores.push(score <= 10 ? score : 0);
+                  } else {
+                    qScores.push(0);
+                  }
                 }
 
-                await supabase.from('assessment_results').insert({
+                console.log(`[Assessment] Extracted scores for conversation ${conversationId}:`, {
+                  totalScore,
+                  readinessBand,
+                  qScores,
+                });
+
+                const { error: insertError } = await supabase.from('assessment_results').insert({
                   conversation_id: conversationId,
                   total_score: totalScore,
                   readiness_band: readinessBand,
@@ -178,9 +212,15 @@ export async function POST(req: Request) {
                   q9_score: qScores[8],
                   q10_score: qScores[9],
                 });
+
+                if (insertError) {
+                  console.error('[Assessment] Failed to insert results:', insertError);
+                } else {
+                  console.log('[Assessment] Results saved successfully');
+                }
               }
             } catch (e) {
-              console.warn('Assessment result extraction skipped:', e);
+              console.error('[Assessment] Score extraction error:', e);
             }
 
             // Auto-extract contact info when Section C is completed
@@ -200,6 +240,14 @@ export async function POST(req: Request) {
                   const phoneMatch = userInfo.match(/\+?[\d\s-]{8,}/);
                   const lines = userInfo.split(/[\n,]+/).map((l: string) => l.trim()).filter(Boolean);
 
+                  // Extract designation (line containing "designation" label or second non-data line)
+                  const designationLine = lines.find((l: string) =>
+                    l.toLowerCase().includes('designation')
+                  );
+                  const designation = designationLine
+                    ? designationLine.replace(/designation\s*[:：\-]?\s*/i, '').trim()
+                    : null;
+
                   const name = lines.find((l: string) =>
                     !l.match(/[\w.-]+@[\w.-]+\.\w+/) &&
                     !l.match(/\+?[\d\s-]{8,}/) &&
@@ -208,12 +256,23 @@ export async function POST(req: Request) {
                   ) || null;
 
                   if (emailMatch) {
+                    // Save to contact_submissions
                     await supabase.from('contact_submissions').insert({
                       conversation_id: conversationId,
                       name: name,
                       email: emailMatch[0],
                       phone: phoneMatch ? phoneMatch[0].trim() : null,
                     });
+
+                    // Update assessment_results with user info for report generation
+                    await supabase
+                      .from('assessment_results')
+                      .update({
+                        user_name: name,
+                        user_designation: designation,
+                        report_email: emailMatch[0],
+                      })
+                      .eq('conversation_id', conversationId);
                   }
                 }
               }

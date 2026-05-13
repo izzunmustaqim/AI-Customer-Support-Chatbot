@@ -18,6 +18,7 @@
     "@supabase/supabase-js": "^2.103.2",
     "ai": "^6.0.164",
     "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.7",
     "next": "16.2.4",
     "react": "19.2.4",
     "react-dom": "19.2.4",

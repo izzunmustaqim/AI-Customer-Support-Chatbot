@@ -86,6 +86,13 @@ export async function GET() {
       dailyCounts[day] = (dailyCounts[day] || 0) + 1;
     });
 
+    // Individual assessment results for detailed table
+    const { data: assessmentResults } = await supabaseAdmin
+      .from('assessment_results')
+      .select('*')
+      .order('completed_at', { ascending: false })
+      .limit(50);
+
     return NextResponse.json({
       totalConversations: totalConversations || 0,
       totalMessages: totalMessages || 0,
@@ -96,6 +103,7 @@ export async function GET() {
       bandCounts,
       recentContacts: recentContacts || [],
       dailyCounts,
+      assessmentResults: assessmentResults || [],
     });
   } catch (error) {
     console.error('Analytics API error:', error);

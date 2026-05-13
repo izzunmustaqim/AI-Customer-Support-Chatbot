@@ -246,6 +246,159 @@
   }
 }
 
+/* --- Assessment Results Table --- */
+.assessment-table-card {
+  animation: fadeInUp 0.5s ease 0.4s both;
+}
+
+.assessment-table th {
+  white-space: nowrap;
+  font-size: 0.7rem;
+  padding: 10px 8px;
+}
+
+.assessment-table td {
+  padding: 10px 8px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.score-value {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-text-primary);
+}
+
+.score-max {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+}
+
+.band-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* Q-score color coding */
+.q-score {
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.q-high {
+  color: #4CAF50;
+}
+
+.q-mid {
+  color: #FF9800;
+}
+
+.q-low {
+  color: #f44336;
+}
+
+/* Report status indicators */
+.report-status {
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.status-sent {
+  color: #4CAF50;
+}
+
+.status-generating {
+  color: #FF9800;
+}
+
+.status-failed {
+  color: #f44336;
+}
+
+.status-pending {
+  color: var(--color-text-muted);
+}
+
+/* --- Report Generate Button --- */
+.report-btn {
+  padding: 5px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.report-btn-generate {
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+  color: white;
+}
+
+.report-btn-generate:hover {
+  background: linear-gradient(135deg, #7c3aed, #5b21b6);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
+}
+
+.report-btn-resend {
+  background: rgba(76, 175, 80, 0.15);
+  color: #4CAF50;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.report-btn-resend:hover {
+  background: rgba(76, 175, 80, 0.25);
+}
+
+.report-btn-retry {
+  background: rgba(255, 152, 0, 0.15);
+  color: #FF9800;
+  border: 1px solid rgba(255, 152, 0, 0.3);
+}
+
+.report-btn-retry:hover {
+  background: rgba(255, 152, 0, 0.25);
+}
+
+.report-btn-generating {
+  background: rgba(139, 92, 246, 0.15);
+  color: #8b5cf6;
+  cursor: wait;
+}
+
+.report-btn-disabled {
+  background: rgba(100, 100, 100, 0.1);
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+  font-size: 0.7rem;
+}
+
+.spinner {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(139, 92, 246, 0.3);
+  border-top-color: #8b5cf6;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }

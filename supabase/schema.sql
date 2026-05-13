@@ -65,6 +65,9 @@ CREATE TABLE public.assessment_results (
     q10_score INTEGER DEFAULT 0,
     terminated_at_q2 BOOLEAN DEFAULT false,
     wants_detailed_report BOOLEAN,
+    report_email TEXT,
+    report_status TEXT DEFAULT 'pending' CHECK (report_status IN ('pending', 'generating', 'sent', 'failed')),
+    report_sent_at TIMESTAMPTZ,
     completed_at TIMESTAMPTZ DEFAULT now()
 );
 
