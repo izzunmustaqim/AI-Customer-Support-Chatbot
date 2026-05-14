@@ -1,5 +1,9 @@
+import { redirect } from 'next/navigation';
+import { isDashboardAuthenticated } from '@/lib/dashboard-auth';
 import { StatCard } from '@/components/dashboard/stat-card';
 import { GenerateReportBtn } from '@/components/dashboard/generate-btn';
+import { StatusSelect } from '@/components/dashboard/status-select';
+import { LogoutBtn } from '@/components/dashboard/logout-btn';
 import './dashboard.css';
 
 interface AssessmentResult {
@@ -105,6 +109,11 @@ const BAND_COLORS: Record<string, string> = {
 };
 
 export default async function DashboardPage() {
+  const isAuth = await isDashboardAuthenticated();
+  if (!isAuth) {
+    redirect('/dashboard/login');
+  }
+
   const data = await getAnalytics();
 
   const totalBandEntries = Object.values(data.bandCounts).reduce(
@@ -116,14 +125,17 @@ export default async function DashboardPage() {
     <div className="dashboard">
       <header className="dashboard-header">
         <div>
-          <h1>Analytics Dashboard</h1>
+          <h1>EECA Compliance & Readiness Checklist Dashboard</h1>
           <p className="dashboard-subtitle">
-            Monitor your EECA assessment performance and customer insights
+            Monitor EECA assessment
           </p>
         </div>
-        <a href="/" className="btn btn-ghost" id="dashboard-back-btn">
-          ← Back to Chat
-        </a>
+        <div className="dashboard-header-actions">
+          <a href="/" className="btn btn-ghost" id="dashboard-back-btn">
+            ← Back to Chat
+          </a>
+          <LogoutBtn />
+        </div>
       </header>
 
       {/* Assessment Results Table */}
@@ -150,7 +162,7 @@ export default async function DashboardPage() {
                   <th>Q8</th>
                   <th>Q9</th>
                   <th>Q10</th>
-                  <th>Report</th>
+                  <th>Report Status</th>
                   <th>Date</th>
                   <th>Action</th>
                 </tr>
@@ -184,13 +196,11 @@ export default async function DashboardPage() {
                     <td className={`q-score ${result.q9_score >= 7 ? 'q-high' : result.q9_score >= 4 ? 'q-mid' : 'q-low'}`}>{result.q9_score}</td>
                     <td className={`q-score ${result.q10_score >= 7 ? 'q-high' : result.q10_score >= 4 ? 'q-mid' : 'q-low'}`}>{result.q10_score}</td>
                     <td>
-                      <span className={`report-status status-${result.report_status || 'pending'}`}>
-                        {result.report_status === 'sent' ? '✅ Sent' :
-                          result.report_status === 'generating' ? '⏳ Generating' :
-                            result.report_status === 'failed' ? '❌ Failed' :
-                              result.wants_detailed_report === false ? '⛔ Declined' :
-                                result.wants_detailed_report === true ? '⏳ Pending' : '—'}
-                      </span>
+                      <StatusSelect
+                        assessmentId={result.id}
+                        currentStatus={result.report_status}
+                        wantsReport={result.wants_detailed_report}
+                      />
                     </td>
                     <td>{new Date(result.completed_at).toLocaleDateString('en-MY', { day: 'numeric', month: 'short', year: 'numeric' })}</td>
                     <td>

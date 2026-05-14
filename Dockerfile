@@ -54,4 +54,7 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
+# Dashboard auth — pass via docker run -e DASHBOARD_PASSWORD=xxx
+# ENV DASHBOARD_PASSWORD=
+
 CMD ["node", "server.js"]

@@ -1,8 +1,13 @@
 import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '@/lib/supabase/server';
 import { buildReportDOCX } from '@/lib/docx/build-report-docx';
+import { isDashboardAuthenticated } from '@/lib/dashboard-auth';
 
 export async function POST(req: Request) {
+  if (!(await isDashboardAuthenticated())) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const { assessmentId } = await req.json();
 
