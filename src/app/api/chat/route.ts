@@ -2,8 +2,13 @@
 import { openai } from '@ai-sdk/openai';
 import { streamText } from 'ai';
 import { SYSTEM_PROMPT } from '@/lib/ai/system-prompt';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 export const maxDuration = 30;
+
+// Rate limit: 20 requests per minute per IP
+const RATE_LIMIT_WINDOW_MS = 60_000;
+const RATE_LIMIT_MAX_REQUESTS = 20;
 
 // Retry with exponential backoff for rate limit errors (429)
 async function withRetry<T>(
@@ -44,6 +49,32 @@ function tryGetSupabase() {
 }
 
 export async function POST(req: Request) {
+  // --- Rate Limiting ---
+  const forwarded = req.headers.get('x-forwarded-for');
+  const ip = forwarded?.split(',')[0]?.trim() || 'unknown';
+  const { allowed, remaining, resetAt } = checkRateLimit(
+    ip,
+    RATE_LIMIT_WINDOW_MS,
+    RATE_LIMIT_MAX_REQUESTS
+  );
+
+  if (!allowed) {
+    return new Response(
+      JSON.stringify({
+        error: 'Too many requests. Please wait a moment before trying again.',
+        code: 429,
+      }),
+      {
+        status: 429,
+        headers: {
+          'Content-Type': 'application/json',
+          'Retry-After': String(Math.ceil((resetAt - Date.now()) / 1000)),
+          'X-RateLimit-Remaining': '0',
+        },
+      }
+    );
+  }
+
   try {
     const { messages, sessionId } = await req.json();
 
@@ -125,7 +156,7 @@ export async function POST(req: Request) {
     }
 
     // Convert UIMessage parts format to plain messages for the model
-    const modelMessages = messages.map(
+    const allModelMessages = messages.map(
       (msg: { role: string; parts: Array<{ type: string; text?: string }> }) => ({
         role: msg.role as 'user' | 'assistant' | 'system',
         content:
@@ -135,6 +166,12 @@ export async function POST(req: Request) {
             .join('') || '',
       })
     );
+
+    // Trim message history to avoid exceeding context window limits
+    const MAX_MESSAGES = 40;
+    const modelMessages = allModelMessages.length > MAX_MESSAGES
+      ? allModelMessages.slice(-MAX_MESSAGES)
+      : allModelMessages;
 
     // Stream the AI response with retry logic
     const result = await withRetry(() =>
@@ -284,7 +321,11 @@ export async function POST(req: Request) {
       })
     );
 
-    return result.toUIMessageStreamResponse();
+    return result.toUIMessageStreamResponse({
+      headers: {
+        'X-RateLimit-Remaining': String(remaining),
+      },
+    });
   } catch (error: unknown) {
     const err = error as { status?: number; statusCode?: number; message?: string };
     const status = err?.status || err?.statusCode || 500;

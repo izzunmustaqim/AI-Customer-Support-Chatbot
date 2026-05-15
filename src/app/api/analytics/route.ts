@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '@/lib/supabase/server';
 import { isDashboardAuthenticated } from '@/lib/dashboard-auth';
 
-export async function GET(req: Request) {
+export async function GET() {
   if (!(await isDashboardAuthenticated())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }

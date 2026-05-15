@@ -3,6 +3,8 @@
 import { useState, KeyboardEvent, useRef, useEffect } from 'react';
 import styles from './chat-input.module.css';
 
+const MAX_CHARS = 2000;
+
 interface ChatInputProps {
   onSendMessage: (text: string) => void;
   isLoading: boolean;
@@ -51,6 +53,7 @@ export function ChatInput({ onSendMessage, isLoading }: ChatInputProps) {
           onKeyDown={handleKeyDown}
           placeholder="Type your message..."
           disabled={isLoading}
+          maxLength={MAX_CHARS}
           rows={1}
           id="chat-input-textarea"
           aria-label="Chat message input"
@@ -80,7 +83,11 @@ export function ChatInput({ onSendMessage, isLoading }: ChatInputProps) {
       </div>
       <div className={styles.inputHint}>
         <span>
-          {input.length > 0 ? `${input.length} chars` : 'Enter to send · Shift+Enter for newline'}
+          {input.length > MAX_CHARS - 200
+            ? `${MAX_CHARS - input.length} chars remaining`
+            : input.length > 0
+              ? `${input.length} / ${MAX_CHARS} chars`
+              : 'Enter to send · Shift+Enter for newline'}
         </span>
       </div>
     </div>
