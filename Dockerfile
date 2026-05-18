@@ -49,7 +49,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 # Copy DOCX report template (needed at runtime for report generation)
-COPY --from=builder /app/EECA\ Compliance\ Readiness\ Preliminary\ Report.docx ./
+COPY --from=builder ["/app/EECA Compliance Readiness Preliminary Report.docx", "./"]
 
 USER nextjs
 
