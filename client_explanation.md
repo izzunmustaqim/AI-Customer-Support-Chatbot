@@ -1,10 +1,10 @@
-# How to Explain the AI Customer Support Chatbot to a Client
+# How to Explain the EECA Compliance Assessment Tool to a Client
 
 ---
 
 ## 🎯 The Elevator Pitch (30 seconds)
 
-> "We built an AI-powered chatbot that sits on your website and answers customer questions **instantly, 24/7** — no human staff needed. It also **captures leads**, **collects feedback**, and gives you a **dashboard** to see what customers are asking. It can even run **compliance assessments** like EECA readiness scoring automatically."
+> "We built an AI-powered assessment tool that guides users through a structured **EECA compliance readiness check** — instantly, 24/7, no consultant needed. It **scores their readiness out of 100**, identifies compliance gaps, **captures their contact details**, and generates a professional **Microsoft Word report**. You get a **password-protected admin dashboard** to view all results and manage report delivery."
 
 ---
 
@@ -20,27 +20,17 @@
 
 ---
 
-### 2. Smart Intent Detection
-**What it does:** Automatically classifies every question into categories (pricing, support, demo request, complaint, etc.)
-
-**How to explain it:**
-> "The system automatically **tags every conversation** — is this person asking about pricing? Looking for support? Want a demo? You don't have to read every chat. The dashboard shows you a breakdown of **what customers actually want**."
-
-**Client benefit:** Understand customer needs without reading hundreds of chats.
-
----
-
-### 3. Lead Capture / Contact Form
+### 2. Lead Capture (Auto-Extracted)
 **What it does:** Collects visitor name, email, phone, and company when they show interest.
 
 **How to explain it:**
-> "When a visitor shows buying interest, the chatbot can **collect their contact details** — name, email, phone number. These leads go straight into your database, ready for your sales team to follow up."
+> "After the assessment, if the user wants a detailed report, the AI asks for their **name, email, and phone number**. These are **automatically extracted** from the conversation and saved to the database — no manual data entry needed. Your team can follow up immediately."
 
-**Client benefit:** Turns website visitors into sales opportunities — automatically.
+**Client benefit:** Turns assessment participants into qualified leads — automatically.
 
 ---
 
-### 4. Feedback & Ratings System
+### 3. Feedback & Ratings System
 **What it does:** Star-based rating after each conversation + optional comments.
 
 **How to explain it:**
@@ -50,21 +40,21 @@
 
 ---
 
-### 5. Analytics Dashboard
-**What it does:** Shows total conversations, average ratings, top intents, recent contacts.
+### 4. Admin Dashboard (Password-Protected)
+**What it does:** Shows total assessments, average scores, readiness band distribution, and a full data table with filtering, sorting, and pagination.
 
 **How to explain it:**
-> "You get a **real-time dashboard** showing: how many people chatted, what they asked about, how satisfied they were, and which leads came in. It's like Google Analytics — but specifically for your chatbot conversations."
+> "You get a **password-protected admin dashboard** showing: how many assessments were completed, average readiness scores, and a detailed table of every result. You can **filter by readiness band**, **sort by score**, **update report statuses**, and **generate branded Word reports** with one click."
 
-**Client benefit:** Data-driven decisions about products, services, and customer pain points.
+**Client benefit:** Full visibility into assessment results with zero technical effort.
 
 ---
 
-### 6. EECA Compliance Assessment (Domain Questionnaire)
-**What it does:** Guides users through 15 structured questions, scores their readiness (0–100), and identifies compliance gaps.
+### 5. EECA Compliance Assessment
+**What it does:** Guides users through 1 awareness section + 10 scored questions, scores their readiness (0–100), and identifies compliance gaps.
 
 **How to explain it:**
-> "The chatbot can run **structured assessments** — for example, EECA compliance readiness. It asks 15 questions, **scores the company out of 100**, and shows a readiness band (🟢 High / 🟡 Moderate / 🟠 Low / 🔴 Critical). It then lists specific gaps and recommends actions. This can be customized for **any compliance framework or assessment** your business needs."
+> "The tool runs a **structured EECA readiness assessment**. It asks 10 scored questions covering facility type, energy management, audit readiness, and more. It then **scores the company out of 100**, shows a readiness band (🟢 High / 🟡 Moderate / 🟠 Low / 🔴 Critical), and identifies specific gaps. A **branded Word report** with AI-generated analysis can be generated from the admin dashboard."
 
 **Client benefit:** Automated consulting-grade assessments at scale — no consultant needed per session.
 
@@ -98,10 +88,10 @@ Use these talking points to build confidence:
 
 | Topic | What to Say |
 |-------|------------|
-| **AI Model** | "We use enterprise-grade AI (Groq Llama 3.3 70B) — same technology behind ChatGPT-class systems" |
+| **AI Model** | "We use enterprise-grade AI (OpenAI GPT-5.4-mini) — the latest model powering ChatGPT" |
 | **Speed** | "Responses arrive in under 1 second — faster than any human agent" |
 | **Security** | "Database uses Row Level Security. API keys are never exposed. Data stays in your control" |
-| **Reliability** | "48 automated test cases verify every feature works before deployment" |
+| **Reliability** | "Automated test suite verifies every feature works before deployment" |
 | **Scalable** | "Handles thousands of conversations per month on the free tier alone" |
 | **Customizable** | "We can customize the AI personality, knowledge, and behavior for your specific business in the same day" |
 | **Multi-Provider** | "If one AI provider has issues, we can switch to another (Google, OpenAI, Groq) in minutes" |
@@ -159,15 +149,16 @@ Use these talking points to build confidence:
 
 | Feature | Status | Value |
 |---------|--------|-------|
-| AI Chat (real-time streaming) | ✅ Built | 24/7 instant customer support |
-| Smart Intent Detection | ✅ Built | Know what customers want |
-| Lead Capture | ✅ Built | Auto-collect sales leads |
-| Feedback & Ratings | ✅ Built | Monitor satisfaction |
-| Analytics Dashboard | ✅ Built | Data-driven insights |
+| AI Chat (real-time streaming) | ✅ Built | 24/7 instant assessment support |
 | EECA Compliance Assessment | ✅ Built | Automated scoring & gap analysis |
 | Full-Page Assessment Mode | ✅ Built | Dedicated assessment interface |
-| PDF Report Generation | ✅ Built | Downloadable assessment reports |
-| Docker Deployment | ✅ Built | Enterprise-ready hosting |
+| Auto Lead Capture | ✅ Built | Contact info extracted from chat |
+| Feedback & Ratings | ✅ Built | Monitor satisfaction |
+| Password-Protected Dashboard | ✅ Built | Admin-only access with auth gate |
+| Assessment Data Table | ✅ Built | Filter, sort, paginate results (TanStack) |
+| DOCX Report Generation | ✅ Built | Branded Word reports with AI analysis |
+| Report Status Management | ✅ Built | Track pending → sent workflow |
+| Docker Deployment | ✅ Built | Enterprise-ready VPS hosting |
 | CI/CD Pipeline | ✅ Built | Safe, automated updates |
-| 48 Automated Tests | ✅ Built | Reliability guarantee |
-| Multi-AI Provider Support | ✅ Built | Groq, Gemini, OpenAI, etc. |
+| Automated Test Suite | ✅ Built | Reliability guarantee |
+| Multi-AI Provider Support | ✅ Built | OpenAI, Groq, Gemini |
