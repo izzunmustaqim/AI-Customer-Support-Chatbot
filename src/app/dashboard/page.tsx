@@ -5,6 +5,9 @@ import type { AssessmentResult } from '@/components/dashboard/assessment-table';
 import { LogoutBtn } from '@/components/dashboard/logout-btn';
 import './dashboard.css';
 
+// Force dynamic rendering — auth check must run on every request, not at build time
+export const dynamic = 'force-dynamic';
+
 interface AnalyticsData {
   totalConversations: number;
   totalMessages: number;
