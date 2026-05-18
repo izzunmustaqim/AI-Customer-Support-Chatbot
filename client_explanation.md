@@ -10,13 +10,13 @@
 
 ## 🧩 Explaining Each Feature (Non-Technical Language)
 
-### 1. AI Chat Widget
-**What the client sees:** A sleek chat bubble in the bottom-right of the website.
+### 1. Full-Page AI Assessment
+**What the client sees:** A branded landing page with a "Start EECA Assessment" button that opens a dedicated, full-page conversational interface.
 
 **How to explain it:**
-> "When a visitor lands on your website, they see a chat button. They click it, type a question, and get an **instant, intelligent reply** — powered by AI. It understands natural language, so customers can ask things like *'What are your prices?'* or *'How do I book?'* and get proper answers in under 1 second."
+> "When a visitor clicks **Start Assessment**, they're taken to a full-page AI-powered chat. The AI walks them through a structured EECA readiness questionnaire — asking questions one at a time with clickable buttons. It feels like talking to an expert consultant, but it's available **24/7** and takes only 5–10 minutes."
 
-**Client benefit:** No more lost customers waiting for email replies.
+**Client benefit:** Professional assessment experience — no scheduling, no waiting, no consultant fees.
 
 ---
 
@@ -102,20 +102,21 @@ Use these talking points to build confidence:
 ## 🎤 Sample Client Meeting Script
 
 ### Opening (2 min)
-> "Right now, when a customer visits your website at midnight and has a question — what happens? They leave. With our AI chatbot, they get an instant, professional answer and you get their contact details."
+> "Right now, when a company wants to know if they're EECA-compliant, what happens? They have to schedule a meeting with a consultant — that's time and money. With our tool, they go to your website, click **Start Assessment**, answer 10 questions, and get their readiness score **instantly**. And you get their contact details."
 
 ### Live Demo (5 min)
-1. Open the website → show the landing page
-2. Click the chat bubble → ask a question relevant to their industry
-3. Show the AI responding in real-time (streaming)
-4. Show the feedback rating pop-up
-5. Open the dashboard → "All this data is captured automatically"
+1. Open the website → show the branded landing page with Sandhurst logo
+2. Click **Start EECA Assessment** → show the full-page assessment interface
+3. Walk through the first few questions → show clickable buttons and checkboxes
+4. Show the AI generating the score breakdown in real-time (streaming)
+5. Open the admin dashboard → "All results are captured here — scores, contact info, report status"
+6. Click **Generate Report** → show the branded Word document downloading
 
 ### Customization Pitch (2 min)
-> "This demo is generic. For your business, we'll customize the AI to know your products, your pricing, your FAQ — so it sounds like **your best employee** answering questions."
+> "This is built for EECA, but the same engine can power **any compliance framework** — ESG, ISO 50001, fire safety, OSHA. We customize the questions, scoring, and report branding for your specific needs."
 
 ### Closing (1 min)
-> "Setup takes about 1–2 weeks. We can start with a pilot on your website and measure results. If it captures even one lead per week that converts — it pays for itself."
+> "Setup takes about 1–2 weeks. You can embed this on your website and start capturing leads immediately. Every completed assessment is a qualified prospect for your consulting services."
 
 ---
 

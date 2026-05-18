@@ -35,7 +35,11 @@ export async function setAuthCookie(): Promise<void> {
 
   cookieStore.set(COOKIE_NAME, token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    // Behind reverse proxies (Cloudflare Tunnel), the internal connection is
+    // HTTP even though the external connection is HTTPS. Set COOKIE_SECURE=false
+    // in .env.local on VPS deployments behind a tunnel/proxy.
+    // Defaults to true in production for direct HTTPS deployments.
+    secure: process.env.COOKIE_SECURE !== 'false' && process.env.NODE_ENV === 'production',
     sameSite: 'lax',
     maxAge: TOKEN_MAX_AGE,
     path: '/',
