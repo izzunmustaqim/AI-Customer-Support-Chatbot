@@ -24,17 +24,6 @@ CREATE TABLE public.messages (
     token_count INTEGER
 );
 
--- 3. Contact Submissions: Captured lead info
-CREATE TABLE public.contact_submissions (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    conversation_id UUID REFERENCES public.conversations(id) ON DELETE CASCADE,
-    name TEXT,
-    email TEXT,
-    phone TEXT,
-    company TEXT,
-    message TEXT,
-    submitted_at TIMESTAMPTZ DEFAULT now()
-);
 
 -- 4. Feedback: User satisfaction ratings
 CREATE TABLE public.feedback (
@@ -66,6 +55,7 @@ CREATE TABLE public.assessment_results (
     terminated_at_q2 BOOLEAN DEFAULT false,
     wants_detailed_report BOOLEAN,
     report_email TEXT,
+    phone TEXT,
     report_status TEXT DEFAULT 'pending' CHECK (report_status IN ('pending', 'generating', 'sent', 'failed')),
     report_sent_at TIMESTAMPTZ,
     completed_at TIMESTAMPTZ DEFAULT now()
@@ -75,7 +65,7 @@ CREATE TABLE public.assessment_results (
 -- INDEXES for query performance
 -- =============================================
 CREATE INDEX idx_messages_conversation ON public.messages(conversation_id, created_at);
-CREATE INDEX idx_contacts_email ON public.contact_submissions(email);
+
 CREATE INDEX idx_conversations_session ON public.conversations(session_id);
 CREATE INDEX idx_conversations_status ON public.conversations(status);
 CREATE INDEX idx_feedback_rating ON public.feedback(rating);
@@ -88,20 +78,20 @@ CREATE INDEX idx_results_score ON public.assessment_results(total_score);
 -- =============================================
 ALTER TABLE public.conversations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.messages ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.contact_submissions ENABLE ROW LEVEL SECURITY;
+
 ALTER TABLE public.feedback ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.assessment_results ENABLE ROW LEVEL SECURITY;
 
 -- Allow anonymous inserts (chatbot users aren't authenticated)
 CREATE POLICY "anon_insert_conversations" ON public.conversations FOR INSERT WITH CHECK (true);
 CREATE POLICY "anon_insert_messages" ON public.messages FOR INSERT WITH CHECK (true);
-CREATE POLICY "anon_insert_contacts" ON public.contact_submissions FOR INSERT WITH CHECK (true);
+
 CREATE POLICY "anon_insert_feedback" ON public.feedback FOR INSERT WITH CHECK (true);
 CREATE POLICY "anon_insert_results" ON public.assessment_results FOR INSERT WITH CHECK (true);
 
 -- Service role full access (for API routes and dashboard only)
 CREATE POLICY "service_all_conversations" ON public.conversations FOR ALL USING (auth.role() = 'service_role');
 CREATE POLICY "service_all_messages" ON public.messages FOR ALL USING (auth.role() = 'service_role');
-CREATE POLICY "service_all_contacts" ON public.contact_submissions FOR ALL USING (auth.role() = 'service_role');
+
 CREATE POLICY "service_all_feedback" ON public.feedback FOR ALL USING (auth.role() = 'service_role');
 CREATE POLICY "service_all_results" ON public.assessment_results FOR ALL USING (auth.role() = 'service_role');

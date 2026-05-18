@@ -10,8 +10,8 @@ interface GenerateReportBtnProps {
 }
 
 export function GenerateReportBtn({
-  // assessmentId,
-  // reportStatus,
+  assessmentId,
+  reportStatus,
   wantsReport,
 }: GenerateReportBtnProps) {
   // No button if user declined the report
@@ -20,13 +20,13 @@ export function GenerateReportBtn({
   }
 
   // --- Report generation temporarily disabled ---
-  return (
-    <button className="report-btn report-btn-disabled" disabled title="Report generation coming soon">
-      📄 Coming Soon
-    </button>
-  );
+  // return (
+  //   <button className="report-btn report-btn-disabled" disabled title="Report generation coming soon">
+  //     📄 Coming Soon
+  //   </button>
+  // );
 
-  /* --- Re-enable by uncommenting below and removing the above return ---
+  //  --- Re-enable by uncommenting below and removing the above return ---
   const [status, setStatus] = useState(reportStatus);
   const [loading, setLoading] = useState(false);
 
@@ -96,5 +96,5 @@ export function GenerateReportBtn({
       📄 Generate
     </button>
   );
-  */
+
 }

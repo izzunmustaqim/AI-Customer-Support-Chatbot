@@ -293,14 +293,6 @@ export async function POST(req: Request) {
                   ) || null;
 
                   if (emailMatch) {
-                    // Save to contact_submissions
-                    await supabase.from('contact_submissions').insert({
-                      conversation_id: conversationId,
-                      name: name,
-                      email: emailMatch[0],
-                      phone: phoneMatch ? phoneMatch[0].trim() : null,
-                    });
-
                     // Update assessment_results with user info for report generation
                     await supabase
                       .from('assessment_results')
@@ -308,6 +300,7 @@ export async function POST(req: Request) {
                         user_name: name,
                         user_designation: designation,
                         report_email: emailMatch[0],
+                        phone: phoneMatch ? phoneMatch[0].trim() : null,
                       })
                       .eq('conversation_id', conversationId);
                   }

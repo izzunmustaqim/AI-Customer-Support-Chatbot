@@ -35,15 +35,21 @@ ALTER TABLE public.assessment_results ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "anon_insert_results" ON public.assessment_results FOR INSERT WITH CHECK (true);
 CREATE POLICY "service_all_results" ON public.assessment_results FOR ALL USING (auth.role() = 'service_role');
 
+-- Step 3b: Add columns that may not exist yet (idempotent)
+ALTER TABLE public.assessment_results ADD COLUMN IF NOT EXISTS phone TEXT;
+ALTER TABLE public.assessment_results ADD COLUMN IF NOT EXISTS report_email TEXT;
+ALTER TABLE public.assessment_results ADD COLUMN IF NOT EXISTS report_status TEXT DEFAULT 'pending' CHECK (report_status IN ('pending', 'generating', 'sent', 'failed'));
+ALTER TABLE public.assessment_results ADD COLUMN IF NOT EXISTS report_sent_at TIMESTAMPTZ;
+
 -- Step 4: Fix existing RLS policies (restrict service-role-only access)
 -- Drop old permissive policies
 DROP POLICY IF EXISTS "service_all_conversations" ON public.conversations;
 DROP POLICY IF EXISTS "service_all_messages" ON public.messages;
-DROP POLICY IF EXISTS "service_all_contacts" ON public.contact_submissions;
+
 DROP POLICY IF EXISTS "service_all_feedback" ON public.feedback;
 
 -- Recreate with service_role restriction
 CREATE POLICY "service_all_conversations" ON public.conversations FOR ALL USING (auth.role() = 'service_role');
 CREATE POLICY "service_all_messages" ON public.messages FOR ALL USING (auth.role() = 'service_role');
-CREATE POLICY "service_all_contacts" ON public.contact_submissions FOR ALL USING (auth.role() = 'service_role');
+
 CREATE POLICY "service_all_feedback" ON public.feedback FOR ALL USING (auth.role() = 'service_role');
