@@ -74,7 +74,7 @@ describe('ChatInput Component', () => {
     render(<ChatInput onSendMessage={mockSendMessage} isLoading={false} />);
     const textarea = screen.getByPlaceholderText('Type your message...');
     fireEvent.change(textarea, { target: { value: 'Hello' } });
-    expect(screen.getByText('5 chars')).toBeInTheDocument();
+    expect(screen.getByText('5 / 2000 chars')).toBeInTheDocument();
   });
 
   it('should show hint text when input is empty', () => {
