@@ -22,6 +22,7 @@ export interface AssessmentResult {
   user_name: string | null;
   user_designation: string | null;
   report_email: string | null;
+  phone: string | null;
   total_score: number;
   readiness_band: string;
   q1_score: number;
@@ -103,6 +104,10 @@ function buildColumns() {
       cell: (info) => (
         <span className="email-cell">{info.getValue() || '—'}</span>
       ),
+    }),
+    col.accessor('phone', {
+      header: 'Phone',
+      cell: (info) => info.getValue() || '—',
     }),
     col.accessor('total_score', {
       header: 'Score',

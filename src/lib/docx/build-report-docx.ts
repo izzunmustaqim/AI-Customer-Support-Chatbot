@@ -25,6 +25,8 @@ interface ReportData {
   qScores: number[];
   completedAt: string;
   aiAnalysis?: string;
+  /** User's actual answers keyed by q1…q10, sourced from the messages table */
+  questionResponses?: Record<string, string>;
 }
 
 function getStatusLabel(score: number): string {
@@ -181,6 +183,9 @@ export async function buildReportDOCX(data: ReportData): Promise<Buffer> {
     .map((s, i) => ({ score: s, cat: ASSESSMENT_CATEGORIES[i] }))
     .filter(g => g.score >= 4 && g.score < 7);
 
+  // Build score breakdown using actual user answers from the messages table
+  const qr = data.questionResponses || {};
+
   // Build replacement map for bracketed placeholders
   const replacements: Record<string, string> = {
     // Cover page
@@ -193,38 +198,45 @@ export async function buildReportDOCX(data: ReportData): Promise<Buffer> {
     'EECA-SA-[AutoID]': refId,
     '[AutoID]': refId.replace('EECA-SA-', ''),
 
-    // Executive summary — Fix #7: Use the full pattern so it works even if template score changes
+    // Executive summary
     'Score: 65 / 100': `Score: ${data.totalScore} / 100`,
     'MODERATE READINESS': getBandLabel(data.readinessBand).split(' (')[0],
 
-    // // Status table entries
-    // '[Industrial / Commercial]': getStatusLabel(data.qScores[0]),
-    // '[Applicable / Not Sure / Exempt]': getStatusLabel(data.qScores[1]),
-    // '[Complete / Partial / Missing]': getStatusLabel(data.qScores[5]),
-    // '[Appointed / In Progress / None]': getStatusLabel(data.qScores[2]),
-    // '[Implemented / Partial / None]': getStatusLabel(data.qScores[7]),
-    // '[Ready / Gaps Exist / Not Ready]': getStatusLabel(data.qScores[4]),
-    // '[Completed / Pending REA / None]': getStatusLabel(data.qScores[3]),
-    // '[Ready / Partial / Not Ready]': getStatusLabel(data.qScores[8]),
+    // Section 2: Response Summary & Gap Analysis — "Current Status / Input" column
+    // These match the EXACT placeholder text in the DOCX template
+    '[Industrial / Commercial]': qr.q1 || getStatusLabel(data.qScores[0]),
+    '[Applicable / Not Sure / Exempt]': qr.q2 || getStatusLabel(data.qScores[1]),
+    '[Complete / Partial / Missing]': qr.q3 || getStatusLabel(data.qScores[2]),
+    '[Appointed / In Progress / None]': qr.q4 || getStatusLabel(data.qScores[3]),
+    '[Implemented / Partial / None]': qr.q5 || getStatusLabel(data.qScores[4]),
+    '[Q6 Elements]': qr.q6 || qr.q7 || getStatusLabel(data.qScores[5]),
+    '[Q7 Elements]': qr.q6 || qr.q7 || getStatusLabel(data.qScores[6]),
+    '[Ready / Gaps Exist / Not Ready]': qr.q8 || getStatusLabel(data.qScores[7]),
+    '[Completed / Pending REA / None]': qr.q9 || getStatusLabel(data.qScores[8]),
+    '[Ready / Partial / Not Ready]': qr.q10 || getStatusLabel(data.qScores[9]),
 
-    // // Gap analysis
+    // // Gap analysis — Section 2 bottom
     // 'A Registered Energy Manager (REM) has not yet been formally appointed.':
     //   severeGaps.length > 0
-    //     ? severeGaps.map(g => `${g.cat.label}: ${g.cat.field} — scored ${g.score}/10`).join('\n')
+    //     ? severeGaps.map(g => `${g.cat.label} (${g.score}/10): ${g.cat.field}`).join('\n')
     //     : 'No severe gaps identified.',
     // 'Energy audit readiness is incomplete and requires a Registered Energy Auditor (REA) full scope review.':
-    //   '',
+    //   severeGaps.length > 1
+    //     ? severeGaps.slice(1).map(g => `${g.cat.label} (${g.score}/10): ${g.cat.field}`).join('\n')
+    //     : '',
     // 'The Energy Management System (EnMS) is not yet fully established across all required levels.':
     //   moderateGaps.length > 0
-    //     ? moderateGaps.map(g => `${g.cat.label}: ${g.cat.field} — scored ${g.score}/10`).join('\n')
+    //     ? moderateGaps.map(g => `${g.cat.label} (${g.score}/10): ${g.cat.field}`).join('\n')
     //     : 'No moderate gaps identified.',
 
-    // // Recommendation table
-    // '[Auto-filled] e.g., No formal REM appointed.': `${getStatusLabel(data.qScores[2])} (${data.qScores[2]}/10)`,
-    // '[Auto-filled] e.g., Partial policies.': `${getStatusLabel(data.qScores[7])} (${data.qScores[7]}/10)`,
+    // // Section 4: Recommendation table
+    // '[Auto-filled] e.g., No formal REM appointed.': `${getStatusLabel(data.qScores[3])} (${data.qScores[3]}/10)`,
+    // '[Auto-filled] e.g., Partial policies.': `${getStatusLabel(data.qScores[4])} (${data.qScores[4]}/10)`,
+    // '[Auto-filled] e.g., Data not finalized.': `${getStatusLabel(data.qScores[7])} (${data.qScores[7]}/10)`,
+    // '[Auto-filled] e.g., Pending REA sign-off.': `${getStatusLabel(data.qScores[8])} (${data.qScores[8]}/10)`,
 
-    // // Overall summary placeholder
-    // '[Your facility demonstrates a baseline understanding of the EECA requirements with certain elements already initiated. However, critical structural gaps remain in formal data readiness, systemic Energy Management System (EnMS) deployment, and definitive audit signoffs.]':
+    // // Executive summary — overall summary paragraph
+    // 'Your facility demonstrates a baseline understanding of the EECA requirements with certain elements already initiated. However, critical structural gaps remain in formal data readiness, systemic Energy Management System (EnMS) deployment, and definitive audit signoffs.':
     //   data.aiAnalysis
     //     ? data.aiAnalysis.replace(/[#*]/g, '').substring(0, 2000)
     //     : getDefaultSummary(data.totalScore),

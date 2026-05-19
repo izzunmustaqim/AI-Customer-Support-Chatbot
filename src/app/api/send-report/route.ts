@@ -29,8 +29,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Assessment not found' }, { status: 404 });
     }
 
-    // 2. Fetch conversation messages for AI analysis
+    // 2. Fetch conversation messages for AI analysis + question response extraction
     let aiAnalysis = '';
+    let questionResponses: Record<string, string> = {};
+
     if (result.conversation_id) {
       const { data: messages } = await supabase
         .from('messages')
@@ -39,8 +41,37 @@ export async function POST(req: Request) {
         .order('created_at', { ascending: true });
 
       if (messages && messages.length > 0) {
-        const conversationSummary = messages
-          .map((m: { role: string; content: string }) => `${m.role}: ${m.content}`)
+        // ── Extract question responses from conversation ──
+        // Strategy: find each AI message that asks Q1/Q10 … Q10/Q10,
+        // then take the very next user message as the user's answer.
+        type Message = { role: string; content: string };
+        for (let i = 0; i < messages.length - 1; i++) {
+          const msg = messages[i] as Message;
+          if (msg.role !== 'assistant') continue;
+
+          // Match "Q1/Q10", "Q2/Q10" … "Q10/Q10" (the question label the AI uses)
+          const qMatch = msg.content.match(/Q(\d{1,2})\/Q?10/i);
+          if (!qMatch) continue;
+
+          const qNum = parseInt(qMatch[1], 10);
+          if (qNum < 1 || qNum > 10) continue;
+
+          // Find the next user message immediately after this AI message
+          const nextUserMsg = (messages as Message[])
+            .slice(i + 1)
+            .find((m) => m.role === 'user');
+
+          if (nextUserMsg) {
+            // Trim whitespace and cap length for report display
+            questionResponses[`q${qNum}`] = nextUserMsg.content.trim().substring(0, 300);
+          }
+        }
+
+        console.log(`[Report] Extracted ${Object.keys(questionResponses).length} question responses from messages`);
+
+        // ── Build AI analysis summary ──
+        const conversationSummary = (messages as Message[])
+          .map((m) => `${m.role}: ${m.content}`)
           .join('\n');
 
         try {
@@ -100,6 +131,7 @@ Generate a professional overall summary for the report.`,
       ],
       completedAt: result.completed_at,
       aiAnalysis,
+      questionResponses,
     });
 
     // 4. Update status

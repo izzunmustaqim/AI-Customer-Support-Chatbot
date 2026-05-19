@@ -274,23 +274,40 @@ export async function POST(req: Request) {
 
                 if (userInfo) {
                   const emailMatch = userInfo.match(/[\w.-]+@[\w.-]+\.\w+/);
-                  const phoneMatch = userInfo.match(/\+?[\d\s-]{8,}/);
+                  // Strict phone regex: must start with digit or +digit (not a space)
+                  const phoneMatch = userInfo.match(/\+?\d[\d\s-]{7,}/);
                   const lines = userInfo.split(/[\n,]+/).map((l: string) => l.trim()).filter(Boolean);
+                  // Reusable strict phone-line detector (same pattern as phoneMatch)
+                  const isPhoneLine = (l: string) => /\+?\d[\d\s-]{7,}/.test(l) && !/[a-zA-Z]{3,}/.test(l);
 
-                  // Extract designation (line containing "designation" label or second non-data line)
-                  const designationLine = lines.find((l: string) =>
-                    l.toLowerCase().includes('designation')
-                  );
-                  const designation = designationLine
-                    ? designationLine.replace(/designation\s*[:：\-]?\s*/i, '').trim()
-                    : null;
-
+                  // Extract name: first non-email, non-phone line
                   const name = lines.find((l: string) =>
                     !l.match(/[\w.-]+@[\w.-]+\.\w+/) &&
-                    !l.match(/\+?[\d\s-]{8,}/) &&
+                    !isPhoneLine(l) &&
                     !l.toLowerCase().includes('designation') &&
                     l.length > 1
                   ) || null;
+
+                  // Extract designation:
+                  // 1st priority — line with "designation" label (e.g. "Designation: Manager")
+                  // 2nd priority — positional fallback: second non-email/non-phone line after name
+                  const designationLine = lines.find((l: string) =>
+                    l.toLowerCase().includes('designation')
+                  );
+                  let designation: string | null = null;
+                  if (designationLine) {
+                    designation = designationLine.replace(/designation\s*[:：\-]?\s*/i, '').trim() || null;
+                  } else {
+                    // Positional fallback: find the second non-email, non-phone, non-name line
+                    const nonDataLines = lines.filter((l: string) =>
+                      !l.match(/[\w.-]+@[\w.-]+\.\w+/) &&
+                      !isPhoneLine(l) &&
+                      !l.toLowerCase().includes('designation') &&
+                      l.length > 1
+                    );
+                    // nonDataLines[0] = name, nonDataLines[1] = designation
+                    designation = nonDataLines[1] || null;
+                  }
 
                   if (emailMatch) {
                     // Update assessment_results with user info for report generation
