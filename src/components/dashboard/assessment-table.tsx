@@ -181,7 +181,10 @@ export function AssessmentTable({ data }: AssessmentTableProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({
+    q1: false, q2: false, q3: false, q4: false, q5: false,
+    q6: false, q7: false, q8: false, q9: false, q10: false,
+  });
   const [showColumnPicker, setShowColumnPicker] = useState(false);
 
   const table = useReactTable({
