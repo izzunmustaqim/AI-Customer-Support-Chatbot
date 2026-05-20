@@ -20,6 +20,7 @@ interface ReportData {
   userName: string;
   userDesignation: string | null;
   userEmail: string;
+  phoneNo: string | null;
   totalScore: number;
   readinessBand: string;
   qScores: number[];
@@ -189,11 +190,10 @@ export async function buildReportDOCX(data: ReportData): Promise<Buffer> {
   // Build replacement map for bracketed placeholders
   const replacements: Record<string, string> = {
     // Cover page
-    // '[Client Company Name]': data.userName,
-    '[Respondent Name], [Designation]': `${data.userName}${data.userDesignation ? `, ${data.userDesignation}` : ''}`,
-    '[Respondent Name]': data.userName,
-    '[Designation]': data.userDesignation || '',
-    // '[Facility Name]': 'As per assessment',
+    '[Client Company Name]': data.userName,
+    '[Email]': data.userEmail,
+    '[Phone No]': data.phoneNo || '',
+    '[Job Title]': data.userDesignation || '',
     '[Date]': dateStr,
     'EECA-SA-[AutoID]': refId,
     '[AutoID]': refId.replace('EECA-SA-', ''),
@@ -209,8 +209,8 @@ export async function buildReportDOCX(data: ReportData): Promise<Buffer> {
     '[Complete / Partial / Missing]': qr.q3 || getStatusLabel(data.qScores[2]),
     '[Appointed / In Progress / None]': qr.q4 || getStatusLabel(data.qScores[3]),
     '[Implemented / Partial / None]': qr.q5 || getStatusLabel(data.qScores[4]),
-    '[Q6 Elements]': qr.q6 || qr.q7 || getStatusLabel(data.qScores[5]),
-    '[Q7 Elements]': qr.q6 || qr.q7 || getStatusLabel(data.qScores[6]),
+    '[Q6 Elements]': qr.q6 || getStatusLabel(data.qScores[5]),
+    '[Q7 Elements]': qr.q7 || getStatusLabel(data.qScores[6]),
     '[Ready / Gaps Exist / Not Ready]': qr.q8 || getStatusLabel(data.qScores[7]),
     '[Completed / Pending REA / None]': qr.q9 || getStatusLabel(data.qScores[8]),
     '[Ready / Partial / Not Ready]': qr.q10 || getStatusLabel(data.qScores[9]),

@@ -121,6 +121,7 @@ Generate a professional overall summary for the report.`,
       userName: result.user_name || 'Assessment User',
       userDesignation: result.user_designation,
       userEmail: result.report_email || '',
+      phoneNo: result.phone || null,
       totalScore: result.total_score,
       readinessBand: result.readiness_band,
       qScores: [
